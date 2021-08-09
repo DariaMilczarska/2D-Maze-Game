@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private float startPositionX = -8.11f;
+    private float startPositionY = -4.29f;
     void Start()
     {
-        transform.position = new Vector2(-8.11f, -4.29f);
+        ResetPosition();
     }
 
     // Update is called once per frame
@@ -23,6 +24,18 @@ public class Player : MonoBehaviour
         float speed = 5f;
 
         transform.Translate(new Vector3(horizontal, vertical, 0.0f) * speed * Time.deltaTime);
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = new Vector2(startPositionX, startPositionY);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Treasure")
+        {
+            ResetPosition();
+        }
     }
 
 }
