@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Room 
 {
-    private int coordinateX { get; set; }
+    public int coordinateX { get; set; }
 
-    private int coordinateY { get; set; }
-    private bool visited { get; set; }
+    public int coordinateY { get; set; }
+    public bool visited { get; set; }
 
     public Room(int x, int y)
     {
