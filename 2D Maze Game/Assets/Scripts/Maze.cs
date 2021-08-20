@@ -5,13 +5,9 @@ public class Maze
 {
     private int maxWidth { get; set;}
     private int maxHeight { get; set; }
-    private int treasurePositionX { get; set; }
-    private int treasurePositionY { get; set; }
-
-    private int currentPositionX = 0;
-
-    private int currentPositionY = 0;
-
+    public Coordinates treasureCoordinates { get; set; }
+    public Coordinates currentCoordinates { get; set; }
+    public Coordinates previousCoordinates { get; set; }
 
     private Room[,] mazeMatrix;
     Stack<Room> visitedRooms = new Stack<Room>();
@@ -20,8 +16,8 @@ public class Maze
     {
         maxWidth = x;
         maxHeight = y;
-        treasurePositionX = maxWidth;
-        treasurePositionY = maxHeight / 2;
+        treasureCoordinates.coordinateX = maxWidth;
+        treasureCoordinates.coordinateY = maxHeight / 2;
 
         mazeMatrix = new Room[maxWidth, maxHeight];
         for (int i = 0; i < maxWidth; ++i)
@@ -35,28 +31,33 @@ public class Maze
 
     public void GenerateRandomPath()
     {
-
         VisitCurrentRoom();
         ChooseRandomNeighbour();
-        while (CheckIfAccesible(currentPositionX, currentPositionY)) //Check if neighbour was visited
+        while (!CheckIfAccesible(currentCoordinates)) //Check if neighbour was visited
         {
-            GenerateRandomPath();
+            currentCoordinates = previousCoordinates;
+            ChooseRandomNeighbour();
             //then go to next Neigbour
         }
-
+        if () // no unvisited neigbours
+        {
+            visitedRooms.Pop();
+            return;
+        }
+        GenerateRandomPath();    
     }
 
-    public bool CheckIfAccesible(int posX, int posY)
+    public bool CheckIfAccesible(Coordinates coordinates)
     {
-        if(currentPositionX < 0 || currentPositionX == maxWidth)
+        if(coordinates.coordinateX < 0 || coordinates.coordinateX == maxWidth)
         {
             return false;
         }
-        if (currentPositionY < 0 || currentPositionY == maxHeight)
+        if (coordinates.coordinateY < 0 || coordinates.coordinateY == maxHeight)
         {
             return false;
         }
-        if (mazeMatrix[currentPositionX, currentPositionY].visited)
+        if (mazeMatrix[coordinates.coordinateX, coordinates.coordinateY].visited)
         {
             return false;
         }
@@ -66,18 +67,40 @@ public class Maze
 
     public void VisitCurrentRoom() //I have to add another matrix to save which rooms are conected and insert data into it here
     {
-        mazeMatrix[currentPositionX, currentPositionY].VisitRoom();
-        visitedRooms.Push(mazeMatrix[currentPositionX, currentPositionY]);
+        mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY].VisitRoom();
+        visitedRooms.Push(mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY]);
     }
 
     public void ChooseRandomNeighbour()
     {
+        previousCoordinates = currentCoordinates;
         Random random = new Random();
         int randomX = random.Next(-1, 2);
         int randomY = random.Next(-1, 2);
 
-        currentPositionX += randomX;
-        currentPositionY += randomY;
+        currentCoordinates.coordinateX += randomX;
+        currentCoordinates.coordinateY += randomY;
+    }
+
+    public IDictionary<string, bool> GetUnVisitedNeighbours()
+    {
+        public IDictionary<string, bool> neigbourusVisited { get; set; } = new Dictionary<string, bool>();
+        if(currentPositionX -1 >= 0 && mazeMatrix[currentPositionX - 1, currentPositionY].visited == false)
+        {
+            return true;
+        }
+        if (currentPositionX + 1 < maxWidth  && mazeMatrix[currentPositionX + 1, currentPositionY].visited == false)
+        {
+            return true;
+        }
+        if (currentPositionX - 1 >= 0 && mazeMatrix[currentPositionX - 1, currentPositionY].visited == false)
+        {
+            return true;
+        }
+        if (currentPositionX - 1 >= 0 && mazeMatrix[currentPositionX - 1, currentPositionY].visited == false)
+        {
+            return true;
+        }
     }
 
 }
