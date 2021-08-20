@@ -71,24 +71,24 @@ public class Maze
     {
         int neighbourIndex = 0;
         IDictionary<int, Coordinates> neigbourusVisited = new Dictionary<int, Coordinates>();
-        if(currentCoordinates.coordinateX - 1 >= 0 && mazeMatrix[currentCoordinates.coordinateX - 1, currentCoordinates.coordinateY].visited == false)
+        if (currentCoordinates.coordinateX - 1 >= 0 && mazeMatrix[currentCoordinates.coordinateX - 1, currentCoordinates.coordinateY].visited == false)
         {
-            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neigbourusVisited.Add(neighbourIndex, new Coordinates(currentCoordinates.coordinateX - 1, currentCoordinates.coordinateY));
             neighbourIndex++;
         }
         if (currentCoordinates.coordinateX + 1 < maxWidth && mazeMatrix[currentCoordinates.coordinateX + 1, currentCoordinates.coordinateY].visited == false)
         {
-            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neigbourusVisited.Add(neighbourIndex, new Coordinates(currentCoordinates.coordinateX + 1, currentCoordinates.coordinateY));
             neighbourIndex++;
         }
         if (currentCoordinates.coordinateY - 1 >= 0 && mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY - 1].visited == false)
         {
-            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neigbourusVisited.Add(neighbourIndex, new Coordinates(currentCoordinates.coordinateX, currentCoordinates.coordinateY - 1));
             neighbourIndex++;
         }
         if (currentCoordinates.coordinateY + 1 < maxHeight && mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY + 1].visited == false)
         {
-            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neigbourusVisited.Add(neighbourIndex, new Coordinates(currentCoordinates.coordinateX, currentCoordinates.coordinateY + 1));
             neighbourIndex++;
         }
         return neigbourusVisited;
