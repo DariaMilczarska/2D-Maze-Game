@@ -9,11 +9,11 @@ public class MazeManager : MonoBehaviour
 
     void Start()
     {
-        Generate(10, 15);
+        Generate(5,5);
     }
 
     public void Generate(int n, int m)
     {
-
+        maze = new Maze(n, m);
     }
 }

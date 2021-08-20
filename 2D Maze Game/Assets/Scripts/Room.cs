@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class Room 
 {
-    Coordinates coordinates;
+    public Coordinates coordinates { get; set; }
     public bool visited { get; set; }
 
     public Room(int x, int y)
     {
-        coordinates.coordinateX = x;
-        coordinates.coordinateY = y;
+        coordinates = new Coordinates(x, y);
     }
     public void VisitRoom()
     {

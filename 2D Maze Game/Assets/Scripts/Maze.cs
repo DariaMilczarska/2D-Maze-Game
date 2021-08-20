@@ -1,25 +1,25 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Maze
+public class Maze 
 {
     private int maxWidth { get; set;}
     private int maxHeight { get; set; }
     public Coordinates treasureCoordinates { get; set; }
-    public Coordinates currentCoordinates { get; set; }
-    public Coordinates previousCoordinates { get; set; }
+    public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
 
     private Room[,] mazeMatrix;
+    private bool [,] graphRepresentation;
     Stack<Room> visitedRooms = new Stack<Room>();
 
-    public Maze(int x, int y) //Generates empty maze
+    public Maze(int x, int y)
     {
         maxWidth = x;
         maxHeight = y;
-        treasureCoordinates.coordinateX = maxWidth;
-        treasureCoordinates.coordinateY = maxHeight / 2;
 
         mazeMatrix = new Room[maxWidth, maxHeight];
+        graphRepresentation = new bool[maxWidth, maxHeight];
         for (int i = 0; i < maxWidth; ++i)
         {
             for (int j = 0; j < maxHeight; ++j)
@@ -27,80 +27,70 @@ public class Maze
                 mazeMatrix[i, j] = new Room(i, j);
             }
         }
+
+        GenerateRandomPath();
     }
 
     public void GenerateRandomPath()
     {
         VisitCurrentRoom();
-        ChooseRandomNeighbour();
-        while (!CheckIfAccesible(currentCoordinates)) //Check if neighbour was visited
+        while (visitedRooms.Count > 0)
         {
-            currentCoordinates = previousCoordinates;
-            ChooseRandomNeighbour();
-            //then go to next Neigbour
-        }
-        if () // no unvisited neigbours
-        {
-            visitedRooms.Pop();
-            return;
-        }
-        GenerateRandomPath();    
+            currentCoordinates = visitedRooms.Peek().coordinates;
+            IDictionary<int, Coordinates> unvisitedNeighbours = GetUnVisitedNeighbours();
+            if (unvisitedNeighbours.Count > 0)
+            {
+                Coordinates coordinates = ChooseRandomNeighbour(unvisitedNeighbours);
+                currentCoordinates = coordinates;
+                VisitCurrentRoom();
+            }
+            else
+            {
+                visitedRooms.Pop();
+            }
+        } 
     }
 
-    public bool CheckIfAccesible(Coordinates coordinates)
-    {
-        if(coordinates.coordinateX < 0 || coordinates.coordinateX == maxWidth)
-        {
-            return false;
-        }
-        if (coordinates.coordinateY < 0 || coordinates.coordinateY == maxHeight)
-        {
-            return false;
-        }
-        if (mazeMatrix[coordinates.coordinateX, coordinates.coordinateY].visited)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public void VisitCurrentRoom() //I have to add another matrix to save which rooms are conected and insert data into it here
+    public void VisitCurrentRoom()
     {
         mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY].VisitRoom();
         visitedRooms.Push(mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY]);
+        treasureCoordinates = currentCoordinates;
+        graphRepresentation[currentCoordinates.coordinateX, currentCoordinates.coordinateY] = true;
     }
 
-    public void ChooseRandomNeighbour()
+    public Coordinates ChooseRandomNeighbour(IDictionary<int, Coordinates> unvisitedNeighbours)
     {
-        previousCoordinates = currentCoordinates;
-        Random random = new Random();
-        int randomX = random.Next(-1, 2);
-        int randomY = random.Next(-1, 2);
-
-        currentCoordinates.coordinateX += randomX;
-        currentCoordinates.coordinateY += randomY;
+        System.Random random = new System.Random();
+        int randomNeigbourIndex = random.Next(0, unvisitedNeighbours.Count);
+        unvisitedNeighbours.TryGetValue(randomNeigbourIndex, out Coordinates coordinates);
+        return coordinates;
     }
 
-    public IDictionary<string, bool> GetUnVisitedNeighbours()
+    public IDictionary<int, Coordinates> GetUnVisitedNeighbours()
     {
-        public IDictionary<string, bool> neigbourusVisited { get; set; } = new Dictionary<string, bool>();
-        if(currentPositionX -1 >= 0 && mazeMatrix[currentPositionX - 1, currentPositionY].visited == false)
+        int neighbourIndex = 0;
+        IDictionary<int, Coordinates> neigbourusVisited = new Dictionary<int, Coordinates>();
+        if(currentCoordinates.coordinateX - 1 >= 0 && mazeMatrix[currentCoordinates.coordinateX - 1, currentCoordinates.coordinateY].visited == false)
         {
-            return true;
+            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neighbourIndex++;
         }
-        if (currentPositionX + 1 < maxWidth  && mazeMatrix[currentPositionX + 1, currentPositionY].visited == false)
+        if (currentCoordinates.coordinateX + 1 < maxWidth && mazeMatrix[currentCoordinates.coordinateX + 1, currentCoordinates.coordinateY].visited == false)
         {
-            return true;
+            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neighbourIndex++;
         }
-        if (currentPositionX - 1 >= 0 && mazeMatrix[currentPositionX - 1, currentPositionY].visited == false)
+        if (currentCoordinates.coordinateY - 1 >= 0 && mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY - 1].visited == false)
         {
-            return true;
+            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neighbourIndex++;
         }
-        if (currentPositionX - 1 >= 0 && mazeMatrix[currentPositionX - 1, currentPositionY].visited == false)
+        if (currentCoordinates.coordinateY + 1 < maxHeight && mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY + 1].visited == false)
         {
-            return true;
+            neigbourusVisited.Add(neighbourIndex, currentCoordinates);
+            neighbourIndex++;
         }
+        return neigbourusVisited;
     }
-
 }
