@@ -10,7 +10,7 @@ public class Maze
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
 
     private Room[,] mazeMatrix;
-    private bool [,] graphRepresentation;
+    private Coordinates [,] graphRepresentation;
     Stack<Room> visitedRooms = new Stack<Room>();
 
     public Maze(int x, int y)
@@ -19,7 +19,7 @@ public class Maze
         maxHeight = y;
 
         mazeMatrix = new Room[maxWidth, maxHeight];
-        graphRepresentation = new bool[maxWidth, maxHeight];
+        graphRepresentation = new Coordinates[maxWidth * maxHeight, 4];
         for (int i = 0; i < maxWidth; ++i)
         {
             for (int j = 0; j < maxHeight; ++j)
@@ -33,16 +33,17 @@ public class Maze
 
     public void GenerateRandomPath()
     {
-        VisitCurrentRoom();
+        VisitCurrentRoom(currentCoordinates);
         while (visitedRooms.Count > 0)
         {
             currentCoordinates = visitedRooms.Peek().coordinates;
             IDictionary<int, Coordinates> unvisitedNeighbours = GetUnVisitedNeighbours();
             if (unvisitedNeighbours.Count > 0)
             {
-                Coordinates coordinates = ChooseRandomNeighbour(unvisitedNeighbours);
+                Coordinates coordinates = ChooseRandomNeighbour(unvisitedNeighbours); 
+                VisitCurrentRoom(coordinates);
+                SaveIntoGraphRepresentation(coordinates);
                 currentCoordinates = coordinates;
-                VisitCurrentRoom();
             }
             else
             {
@@ -51,12 +52,11 @@ public class Maze
         } 
     }
 
-    public void VisitCurrentRoom()
+    public void VisitCurrentRoom(Coordinates coordinates)
     {
-        mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY].VisitRoom();
-        visitedRooms.Push(mazeMatrix[currentCoordinates.coordinateX, currentCoordinates.coordinateY]);
-        treasureCoordinates = currentCoordinates;
-        graphRepresentation[currentCoordinates.coordinateX, currentCoordinates.coordinateY] = true;
+        mazeMatrix[coordinates.coordinateX, coordinates.coordinateY].VisitRoom();
+        visitedRooms.Push(mazeMatrix[coordinates.coordinateX, coordinates.coordinateY]);
+        treasureCoordinates = coordinates;
     }
 
     public Coordinates ChooseRandomNeighbour(IDictionary<int, Coordinates> unvisitedNeighbours)
@@ -90,7 +90,35 @@ public class Maze
         {
             neigbourusVisited.Add(neighbourIndex, new Coordinates(currentCoordinates.coordinateX, currentCoordinates.coordinateY + 1));
             neighbourIndex++;
-        }
+        }  
         return neigbourusVisited;
+    }
+
+    public void SaveIntoGraphRepresentation(Coordinates coordinates)
+    {
+        if(currentCoordinates.coordinateX != coordinates.coordinateX)
+        {
+            if(currentCoordinates.coordinateX - coordinates.coordinateX > 0)
+            {
+                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 0] = coordinates; //right
+            }
+            else
+            {
+                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 1] = coordinates; //left
+            }
+            
+        }
+        else if (currentCoordinates.coordinateY != coordinates.coordinateY)
+        {
+            if (currentCoordinates.coordinateY - coordinates.coordinateY > 0)
+            {
+                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 2] = coordinates; //down
+            }
+            else
+            {
+                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 3] = coordinates; //up
+            }
+        }
+
     }
 }
