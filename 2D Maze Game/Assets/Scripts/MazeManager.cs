@@ -37,6 +37,7 @@ public class MazeManager : MonoBehaviour
                 for (int j = 0; j <= height; ++j)
                 {
                     GameObject wall = Instantiate(wallPerfab, new Vector2(currentPositionX, currentPositionY), Quaternion.identity);
+                    wall.transform.parent = transform;
                     currentPositionY += wallheight;
 
                     if (counter == 1)

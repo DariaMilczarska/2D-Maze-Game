@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private Rigidbody2D rigidBody;
     private float startPositionX = -8.11f;
     private float startPositionY = -4.29f;
     void Start()
     {
         ResetPosition();
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -21,9 +23,14 @@ public class Player : MonoBehaviour
     {
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
-        float speed = 5f;
+        float speed = 250f;
 
-        transform.Translate(new Vector3(horizontal, vertical, 0.0f) * speed * Time.deltaTime);
+        if(rigidBody != null)
+        {
+            rigidBody.velocity = (new Vector2(horizontal, vertical) * speed * Time.deltaTime);
+        }
+
+        
     }
 
     public void ResetPosition()
