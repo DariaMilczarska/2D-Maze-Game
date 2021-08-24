@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Maze 
 {
-    private int maxWidth { get; set;}
-    private int maxHeight { get; set; }
+    public int maxWidth { get; set;}
+    public int maxHeight { get; set; }
     public Coordinates treasureCoordinates { get; set; }
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
+
+    public bool generationFinished { get; set; }
 
     private Room[,] mazeMatrix;
     private Coordinates [,] graphRepresentation;
@@ -19,6 +21,7 @@ public class Maze
         maxHeight = y;
 
         mazeMatrix = new Room[maxWidth, maxHeight];
+
         graphRepresentation = new Coordinates[maxWidth * maxHeight, 4];
         for (int i = 0; i < maxWidth; ++i)
         {
@@ -49,7 +52,8 @@ public class Maze
             {
                 visitedRooms.Pop();
             }
-        } 
+        }
+        generationFinished = true;
     }
 
     public void VisitCurrentRoom(Coordinates coordinates)
@@ -100,11 +104,11 @@ public class Maze
         {
             if(currentCoordinates.coordinateX - coordinates.coordinateX > 0)
             {
-                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 0] = coordinates; //right
+                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 0] = coordinates; //right
             }
             else
             {
-                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 1] = coordinates; //left
+                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 1] = coordinates; //left
             }
             
         }
@@ -112,11 +116,11 @@ public class Maze
         {
             if (currentCoordinates.coordinateY - coordinates.coordinateY > 0)
             {
-                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 2] = coordinates; //down
+                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 2] = coordinates; //down
             }
             else
             {
-                graphRepresentation[currentCoordinates.coordinateX * maxWidth + currentCoordinates.coordinateY, 3] = coordinates; //up
+                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 3] = coordinates; //up
             }
         }
 
