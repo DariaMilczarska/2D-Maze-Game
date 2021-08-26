@@ -12,4 +12,10 @@ public class Coordinates
         coordinateY = cY;
     }
 
+    public Coordinates(Coordinates c)
+    {
+        coordinateX = c.coordinateX;
+        coordinateY = c.coordinateY;
+    }
+
 }

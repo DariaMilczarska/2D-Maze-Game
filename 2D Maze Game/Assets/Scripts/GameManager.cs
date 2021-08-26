@@ -26,9 +26,4 @@ public class GameManager : MonoBehaviour
             player.ResetPosition();
         }
     }
-
-    void GenerateMaze()
-    {
-
-    }
 }

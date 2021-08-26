@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
     private float startPositionX = -8.11f;
-    private float startPositionY = -4.29f;
+    private float startPositionY = 4.29f;
     void Start()
     {
         ResetPosition();

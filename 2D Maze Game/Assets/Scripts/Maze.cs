@@ -8,12 +8,11 @@ public class Maze
     public int maxHeight { get; set; }
     public Coordinates treasureCoordinates { get; set; }
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
-
-    public bool generationFinished { get; set; }
+    public Coordinates[,] graphRepresentation { get; set; }
 
     private Room[,] mazeMatrix;
-    private Coordinates [,] graphRepresentation;
-    Stack<Room> visitedRooms = new Stack<Room>();
+    
+    private Stack<Room> visitedRooms = new Stack<Room>();
 
     public Maze(int x, int y)
     {
@@ -53,7 +52,6 @@ public class Maze
                 visitedRooms.Pop();
             }
         }
-        generationFinished = true;
     }
 
     public void VisitCurrentRoom(Coordinates coordinates)
