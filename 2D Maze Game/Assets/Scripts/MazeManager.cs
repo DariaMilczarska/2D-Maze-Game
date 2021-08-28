@@ -11,6 +11,10 @@ public class MazeManager : MonoBehaviour
 
     private float sreenHeight = 10f;
 
+    private float wallWidth;
+
+    private float wallHeight;
+
     [SerializeField]
     private int width;
 
@@ -21,7 +25,7 @@ public class MazeManager : MonoBehaviour
     private GameObject wallPerfab;
 
     [SerializeField]
-    private GameObject roomPrefab;
+    private Room roomPrefab;
 
     private List<Room> invincibleRooms { get; set; } = new List<Room>();
 
@@ -30,15 +34,15 @@ public class MazeManager : MonoBehaviour
     void Start()
     {
         maze = new Maze(width, height);
-        float wallWidth = screenWidth / width;
-        float wallheight = sreenHeight / height;
+        wallWidth = screenWidth / (width - 1);
+        wallHeight = sreenHeight / height;
 
-        DrawGrid(wallWidth, wallheight);
+        DrawGrid();
         GenerateInvincibleRooms();
        // AddTunnels();
     }
 
-    private void DrawGrid(float wallWidth, float wallHeight)
+    private void DrawGrid()
     {
         int counter = 0;
         while (counter < 2)
@@ -46,11 +50,11 @@ public class MazeManager : MonoBehaviour
             float currentPositionX = -screenWidth / 2;
             float currentPositionY = sreenHeight / 2;
 
-            for (int i = 0; i <= width + 1; ++i)
+            for (int i = 0; i <= width; ++i)
             {
                 for (int j = 0; j <= height; ++j)
                 {
-                    InstantiateWall(currentPositionX, currentPositionY, wallWidth, wallHeight, counter);
+                    InstantiateWall(currentPositionX, currentPositionY, counter);
                     currentPositionY -= wallHeight;
                 }
                 currentPositionX += wallWidth;
@@ -61,7 +65,7 @@ public class MazeManager : MonoBehaviour
     }
 
 
-    private void InstantiateWall(float currentPosX, float currentPosY, float wallWidth, float wallHeight, int counter)
+    private void InstantiateWall(float currentPosX, float currentPosY, int counter)
     {
         GameObject wall = Instantiate(wallPerfab, new Vector2(currentPosX, currentPosY), Quaternion.identity);
         wall.transform.parent = transform;
@@ -78,7 +82,7 @@ public class MazeManager : MonoBehaviour
 
     private void AdjustVerticalWall(GameObject wall, float wallWidth, float wallHeight)
     {
-        wall.transform.localScale = new Vector2(screenWidth / width, 0.3f);
+        wall.transform.localScale = new Vector2(screenWidth / width, 0.3f); // add scaling width of wall
         wall.transform.position = new Vector2(wall.transform.position.x - wallWidth / 2, wall.transform.position.y - wallHeight / 2);
         wall.transform.Rotate(new Vector3(0, 0, 90));
 
@@ -86,18 +90,32 @@ public class MazeManager : MonoBehaviour
 
     private void GenerateInvincibleRooms()
     {
-        for(int i = 0; i < width; ++i)
+        float currentPositionX = -screenWidth / 2;
+        float currentPositionY = sreenHeight / 2;
+
+        for (int i = 0; i < width; ++i)
         {
             for(int j = 0; j < height; ++j)
             {
-                GameObject leftWall = instantiatedWalls[width * height + j*width + i];
-                GameObject rightWall = instantiatedWalls[width * height + j * width + i * height];
-                GameObject upperWall = instantiatedWalls[j * height + i];
-                GameObject lowerWall = instantiatedWalls[j * height + i + 1];
-                Room room = new Room(i, j, leftWall, rightWall, upperWall, lowerWall);
+                Room room = CreateRoom(i, j);
+                Room instantiadedRoom = Instantiate(roomPrefab, new Vector2(currentPositionX, currentPositionY - (wallHeight / 2)), Quaternion.identity);           
+                instantiadedRoom.transform.localScale = new Vector2(wallWidth, wallHeight);
+                instantiadedRoom.Setup(room);
+                currentPositionY -= wallHeight;
                 invincibleRooms.Add(room);
             }
+            currentPositionX += wallWidth;
+            currentPositionY = sreenHeight / 2;
         }       
+    }
+
+    private Room CreateRoom(int i, int j)
+    {
+        GameObject leftWall = instantiatedWalls[width * height + j * width + i];
+        GameObject rightWall = instantiatedWalls[width * height + j * width + i * height];
+        GameObject upperWall = instantiatedWalls[j * height + i];
+        GameObject lowerWall = instantiatedWalls[j * height + i + 1];
+        return new Room(i, j, leftWall, rightWall, upperWall, lowerWall);
     }
    
     /*private void AddTunnels()

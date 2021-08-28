@@ -516,6 +516,7 @@ MonoBehaviour:
   width: 8
   height: 5
   wallPerfab: {fileID: 4340959604549665455, guid: 626da9e0dab2dc544a516f371625dfc8, type: 3}
+  roomPrefab: {fileID: 3106642851818047770, guid: 0c345fe4e3d81b64099392783a1d88f9, type: 3}
 --- !u!4 &1705120297
 Transform:
   m_ObjectHideFlags: 0
