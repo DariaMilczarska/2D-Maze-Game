@@ -2,13 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Directions
+{
+    RIGHT,
+    LEFT,
+    DOWN,
+    UP
+}
+
 public class Maze 
 {
     public int maxWidth { get; set;}
     public int maxHeight { get; set; }
     public Coordinates treasureCoordinates { get; set; }
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
-    public Coordinates[,] graphRepresentation { get; set; }
+    public Dictionary<Coordinates, int> graphRepresentation { get; set; } = new Dictionary<Coordinates, int>();
 
     private Room[,] mazeMatrix;
     
@@ -21,7 +29,6 @@ public class Maze
 
         mazeMatrix = new Room[maxWidth, maxHeight];
 
-        graphRepresentation = new Coordinates[maxWidth * maxHeight, 4];
         for (int i = 0; i < maxWidth; ++i)
         {
             for (int j = 0; j < maxHeight; ++j)
@@ -31,6 +38,19 @@ public class Maze
         }
 
         GenerateRandomPath();
+
+        foreach(Coordinates coordinates in graphRepresentation.Keys)
+        {
+                if(graphRepresentation.TryGetValue(coordinates, out int value))
+                {
+                    Debug.Log("X: " + coordinates.coordinateX + " Y: " + coordinates.coordinateY + " kierunek: " + value );
+                }
+                else
+                {
+                    Debug.Log("null");
+                }
+            
+        }
     }
 
     public void GenerateRandomPath()
@@ -100,25 +120,25 @@ public class Maze
     {
         if(currentCoordinates.coordinateX != coordinates.coordinateX)
         {
-            if(currentCoordinates.coordinateX - coordinates.coordinateX > 0)
+            if(currentCoordinates.coordinateX - coordinates.coordinateX < 0)
             {
-                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 0] = coordinates; //right
+               graphRepresentation.Add(coordinates, (int) Directions.RIGHT); //right
             }
             else
             {
-                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 1] = coordinates; //left
+                graphRepresentation.Add(coordinates, (int) Directions.LEFT); //left
             }
             
         }
         else if (currentCoordinates.coordinateY != coordinates.coordinateY)
         {
-            if (currentCoordinates.coordinateY - coordinates.coordinateY > 0)
+            if (currentCoordinates.coordinateY - coordinates.coordinateY < 0)
             {
-                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 2] = coordinates; //down
+                graphRepresentation.Add(coordinates, (int) Directions.DOWN); //down
             }
             else
             {
-                graphRepresentation[currentCoordinates.coordinateY * maxWidth + currentCoordinates.coordinateX, 3] = coordinates; //up
+                graphRepresentation.Add(coordinates, (int) Directions.UP); //up
             }
         }
 

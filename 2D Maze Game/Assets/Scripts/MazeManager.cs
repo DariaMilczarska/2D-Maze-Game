@@ -27,7 +27,7 @@ public class MazeManager : MonoBehaviour
     [SerializeField]
     private Room roomPrefab;
 
-    private List<Room> invincibleRooms { get; set; } = new List<Room>();
+    private Dictionary<Coordinates, Room> invincibleRooms { get; set; } = new Dictionary<Coordinates, Room>();
 
     private List<GameObject> instantiatedWalls = new List<GameObject>();
 
@@ -39,7 +39,7 @@ public class MazeManager : MonoBehaviour
 
         DrawGrid();
         GenerateInvincibleRooms();
-       // AddTunnels();
+        AddTunnels();
     }
 
     private void DrawGrid()
@@ -101,8 +101,9 @@ public class MazeManager : MonoBehaviour
                 Room instantiadedRoom = Instantiate(roomPrefab, new Vector2(currentPositionX, currentPositionY - (wallHeight / 2)), Quaternion.identity);           
                 instantiadedRoom.transform.localScale = new Vector2(wallWidth, wallHeight);
                 instantiadedRoom.Setup(room);
+                instantiadedRoom.transform.parent = transform;
                 currentPositionY -= wallHeight;
-                invincibleRooms.Add(room);
+                invincibleRooms.Add(room.coordinates, room);
             }
             currentPositionX += wallWidth;
             currentPositionY = sreenHeight / 2;
@@ -118,13 +119,12 @@ public class MazeManager : MonoBehaviour
         return new Room(i, j, leftWall, rightWall, upperWall, lowerWall);
     }
    
-    /*private void AddTunnels()
+    private void AddTunnels()
     {
-        Coordinates [,] graphRepresentation = maze.graphRepresentation;
-
-        for(int i = 0; i < graphRepresentation.Length; ++i)
+        Dictionary<Coordinates, int> graphRepresentation = maze.graphRepresentation;
+        foreach(Coordinates coordinates in graphRepresentation.Keys)
         {
-            for()
+            
         }
-    }*/
+    }
 }
