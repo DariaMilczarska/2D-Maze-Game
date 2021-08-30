@@ -40,10 +40,10 @@ public class Maze
 
         GenerateRandomPath();
 
-        foreach (KeyValuePair<Coordinates, Directions> item in graphRepresentation)
+        /*foreach (KeyValuePair<Coordinates, Directions> item in graphRepresentation)
         {
             Debug.Log("X: " + item.Key.coordinateX + " Y: " + item.Key.coordinateY + " kierunek: " + item.Value );
-        }
+        }*/
     }
 
     public void GenerateRandomPath()

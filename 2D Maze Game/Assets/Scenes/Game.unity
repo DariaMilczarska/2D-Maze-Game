@@ -478,7 +478,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717052432}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: 0.3, z: 0}
+  m_LocalPosition: {x: -8.96, y: -4.88, z: 0}
   m_LocalScale: {x: 0.42549607, y: 0.42539063, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -513,7 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d26b13eb4845b469a72e0fc090dc2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 8
+  width: 9
   height: 5
   wallPerfab: {fileID: 4340959604549665455, guid: 626da9e0dab2dc544a516f371625dfc8, type: 3}
   roomPrefab: {fileID: 3106642851818047770, guid: 0c345fe4e3d81b64099392783a1d88f9, type: 3}
