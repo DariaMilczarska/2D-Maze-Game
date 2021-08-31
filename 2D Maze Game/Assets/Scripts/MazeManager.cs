@@ -14,7 +14,7 @@ public class MazeManager : MonoBehaviour
 
     private Maze maze;
 
-    private readonly Dimensions screenSize = new Dimensions(18, 10);
+    private readonly Dimensions screenSize = new Dimensions(17.7f, 10);
 
     private Dimensions wallSize;
 
@@ -39,8 +39,7 @@ public class MazeManager : MonoBehaviour
     void Start()
     {
         maze = new Maze(gridWidth, gridHeight);
-        wallSize = new Dimensions(screenSize.width / gridWidth, screenSize.height / gridHeight);
-
+        wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
         DrawGrid();
         GenerateInvincibleRooms();
@@ -51,8 +50,8 @@ public class MazeManager : MonoBehaviour
     {
         foreach(PlacementType type in (PlacementType[])Enum.GetValues(typeof(PlacementType)))
         {
-            float currentPositionX = -(screenSize.width / 2) + wallSize.width / 2;
-            float currentPositionY = screenSize.height / 2;
+            float currentPositionX = -(screenSize.width / 2f) + wallSize.width / 2f;
+            float currentPositionY = screenSize.height / 2f;
 
             int horizontalGridLines = 0, verticalGridLines = 0;
 
@@ -92,14 +91,14 @@ public class MazeManager : MonoBehaviour
         }
         else
         {
-            wall.transform.localScale = new Vector2(wallSize.height, scaleOfWall);
+            wall.transform.localScale = new Vector2(wallSize.width, scaleOfWall);
         }
         return wall;
     }
 
     private void AdjustVerticalWall(Wall wall)
     {
-        wall.transform.localScale = new Vector2(wallSize.width, scaleOfWall); 
+        wall.transform.localScale = new Vector2(wallSize.height, scaleOfWall); 
         wall.transform.position = new Vector2(wall.transform.position.x - wallSize.width / 2, wall.transform.position.y - wallSize.height / 2);
         wall.transform.Rotate(new Vector3(0, 0, 90));
 

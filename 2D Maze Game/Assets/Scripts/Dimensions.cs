@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 public class Dimensions
 {
-    public int width { get; set; }
-    public int height { get; set; }
+    public float width { get; set; }
+    public float height { get; set; }
 
-    public Dimensions(int width, int height)
+    public Dimensions(float width, float height)
     {
         this.width = width;
         this.height = height;
