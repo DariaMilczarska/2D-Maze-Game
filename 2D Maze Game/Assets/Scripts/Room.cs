@@ -7,13 +7,13 @@ public class Room : MonoBehaviour
     public Coordinates coordinates { get; set; }
     public bool visited { get; set; }
 
-    public GameObject leftWall { get; set; }
+    public Wall leftWall { get; set; }
 
-    public GameObject rightWall { get; set; }
+    public Wall rightWall { get; set; }
 
-    public GameObject upperWall { get; set; }
+    public Wall upperWall { get; set; }
 
-    public GameObject lowerWall { get; set; }
+    public Wall lowerWall { get; set; }
 
 
     public Room(int x, int y)
@@ -22,7 +22,7 @@ public class Room : MonoBehaviour
        
     }
 
-    public Room(int x, int y, GameObject lfWall, GameObject rWall, GameObject uWall, GameObject loWall)
+    public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
     {
         coordinates = new Coordinates(x, y);
         leftWall = lfWall;

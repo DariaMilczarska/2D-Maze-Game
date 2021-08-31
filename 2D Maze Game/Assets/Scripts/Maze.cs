@@ -12,6 +12,7 @@ public enum Directions
 
 public class Maze 
 {
+    private System.Random random = new System.Random();
     public int maxWidth { get; set;}
     public int maxHeight { get; set; }
     public Coordinates treasureCoordinates { get; set; }
@@ -39,11 +40,6 @@ public class Maze
         }
 
         GenerateRandomPath();
-
-        /*foreach (KeyValuePair<Coordinates, Directions> item in graphRepresentation)
-        {
-            Debug.Log("X: " + item.Key.coordinateX + " Y: " + item.Key.coordinateY + " kierunek: " + item.Value );
-        }*/
     }
 
     public void GenerateRandomPath()
@@ -76,7 +72,6 @@ public class Maze
 
     public Coordinates ChooseRandomNeighbour(IDictionary<int, Coordinates> unvisitedNeighbours)
     {
-        System.Random random = new System.Random();
         int randomNeigbourIndex = random.Next(0, unvisitedNeighbours.Count);
         unvisitedNeighbours.TryGetValue(randomNeigbourIndex, out Coordinates coordinates);
         return coordinates;
@@ -115,11 +110,11 @@ public class Maze
         {
             if(currentCoordinates.coordinateX - coordinates.coordinateX < 0)
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(coordinates, Directions.RIGHT));
+                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.RIGHT));
             }
             else
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(coordinates, Directions.LEFT));
+                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.LEFT));
             }
             
         }
@@ -127,11 +122,11 @@ public class Maze
         {
             if (currentCoordinates.coordinateY - coordinates.coordinateY < 0)
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(coordinates, Directions.DOWN));
+                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.DOWN));
             }
             else
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(coordinates, Directions.UP));
+                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.UP));
             }
         }
 
