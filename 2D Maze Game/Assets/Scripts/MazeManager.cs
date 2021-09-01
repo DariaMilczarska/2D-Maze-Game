@@ -18,7 +18,9 @@ public class MazeManager : MonoBehaviour
 
     private Dimensions wallSize;
 
-    private float scaleOfWall; 
+    private float scaleOfWall;
+
+    private GameManager gameManager;
 
     [SerializeField]
     private int gridWidth;
@@ -32,18 +34,26 @@ public class MazeManager : MonoBehaviour
     [SerializeField]
     private Room roomPrefab;
 
-    private Dictionary<Coordinates, Room> invincibleRooms { get; set; } = new Dictionary<Coordinates, Room>();
+    public Dictionary<Coordinates, Room> invincibleRooms { get; set; } = new Dictionary<Coordinates, Room>();
 
     private List<Wall> instantiatedWalls = new List<Wall>();
 
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         maze = new Maze(gridWidth, gridHeight);
         wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
+
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
+        GenerateMaze();
+    }
+
+    private void GenerateMaze()
+    {
         DrawGrid();
         GenerateInvincibleRooms();
         AddTunnels();
+        gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
     }
 
     private void DrawGrid()
@@ -119,7 +129,7 @@ public class MazeManager : MonoBehaviour
                 instantiadedRoom.Setup(room);
                 instantiadedRoom.transform.parent = transform;
                 currentPositionY -= wallSize.height;
-                invincibleRooms.Add(room.coordinates, room);
+                invincibleRooms.Add(instantiadedRoom.coordinates, instantiadedRoom);
             }
             currentPositionX += wallSize.width;
             currentPositionY = screenSize.height / 2;
@@ -196,5 +206,25 @@ public class MazeManager : MonoBehaviour
             }
         }
         return placeholder;
+    }
+
+    public Transform FindTreasureRoom()
+    {
+        Coordinates coordinates = new Coordinates(gridWidth - 1, gridHeight - 1);
+        if (invincibleRooms.TryGetValue(coordinates, out Room room))
+        {
+            return room.transform;
+        }
+        return null;
+    }
+
+    public Transform FindStartRoom()
+    {
+        Coordinates coordinates = new Coordinates(0, 0);
+        if (invincibleRooms.TryGetValue(coordinates, out Room room))
+        {
+            return room.transform;
+        }
+        return null;
     }
 }

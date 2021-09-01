@@ -5,11 +5,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
-    private float startPositionX = -8.11f;
-    private float startPositionY = 4.29f;
+    private bool playerPositionSet;
+    private float startPositionX;
+    private float startPositionY;
+
+    [SerializeField]
+    private MazeManager mazeManager;
     void Start()
-    {
-        ResetPosition();
+    {    
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -25,18 +28,22 @@ public class Player : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float speed = 250f;
 
-        if(rigidBody != null)
+        if (rigidBody != null)
         {
             rigidBody.velocity = (new Vector2(horizontal, vertical) * speed * Time.deltaTime);
         }
-
-        
+    }
+    public void SetUpPosition(float posX, float posY)
+    {
+        startPositionX = posX;
+        startPositionY = posY;
     }
 
     public void ResetPosition()
     {
         transform.position = new Vector2(startPositionX, startPositionY);
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Treasure")

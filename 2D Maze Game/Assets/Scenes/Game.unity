@@ -225,7 +225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &600748349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,8 +344,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600748348}
   m_LocalRotation: {x: -0, y: -0, z: -0.005794638, w: 0.99998325}
-  m_LocalPosition: {x: 1.283, y: 0, z: 0}
-  m_LocalScale: {x: 0.7595215, y: 1.3457813, z: 1}
+  m_LocalPosition: {x: -4.16, y: -4.5, z: 0}
+  m_LocalScale: {x: 0.49447888, y: 0.8912168, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -477,13 +477,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717052432}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.96, y: -4.88, z: 0}
-  m_LocalScale: {x: 0.42549607, y: 0.42539063, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.0039957035, w: 0.9999921}
+  m_LocalPosition: {x: 8.82, y: -0.53, z: 0}
+  m_LocalScale: {x: 0.2178625, y: 0.21249112, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.458}
 --- !u!1 &1705120295
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,9 +513,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d26b13eb4845b469a72e0fc090dc2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 9
-  gridHeight: 5
-  wallPerfab: {fileID: 4340959604549665455, guid: 626da9e0dab2dc544a516f371625dfc8, type: 3}
+  treasure: {fileID: 600748349}
+  gridWidth: 20
+  gridHeight: 15
+  wallPerfab: {fileID: 3089019209267082918, guid: 626da9e0dab2dc544a516f371625dfc8, type: 3}
   roomPrefab: {fileID: 3106642851818047770, guid: 0c345fe4e3d81b64099392783a1d88f9, type: 3}
 --- !u!4 &1705120297
 Transform:

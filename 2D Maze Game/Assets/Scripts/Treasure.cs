@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Treasure : MonoBehaviour
 {
-  
-    void Start()
+    public void SetUpCoordinates(Transform treasure)
     {
-        
+        this.transform.position = treasure.position;
     }
 }

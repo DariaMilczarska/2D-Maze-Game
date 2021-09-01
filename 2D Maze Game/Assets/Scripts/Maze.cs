@@ -17,6 +17,7 @@ public class Maze
     public int maxHeight { get; set; }
     public Coordinates treasureCoordinates { get; set; }
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
+    private bool treasurePlaced { get; set; } 
 
     public List<KeyValuePair<Coordinates, Directions>> graphRepresentation { get; set; } 
 
@@ -42,7 +43,7 @@ public class Maze
         GenerateRandomPath();
     }
 
-    public void GenerateRandomPath()
+    private void GenerateRandomPath()
     {
         VisitCurrentRoom(currentCoordinates);
         while (visitedRooms.Count > 0)
@@ -59,6 +60,7 @@ public class Maze
             else
             {
                 visitedRooms.Pop();
+                SetFinishRoom();
             }
         }
     }
@@ -67,17 +69,16 @@ public class Maze
     {
         mazeMatrix[coordinates.coordinateX, coordinates.coordinateY].VisitRoom();
         visitedRooms.Push(mazeMatrix[coordinates.coordinateX, coordinates.coordinateY]);
-        treasureCoordinates = coordinates;
     }
 
-    public Coordinates ChooseRandomNeighbour(IDictionary<int, Coordinates> unvisitedNeighbours)
+    private Coordinates ChooseRandomNeighbour(IDictionary<int, Coordinates> unvisitedNeighbours)
     {
         int randomNeigbourIndex = random.Next(0, unvisitedNeighbours.Count);
         unvisitedNeighbours.TryGetValue(randomNeigbourIndex, out Coordinates coordinates);
         return coordinates;
     }
 
-    public IDictionary<int, Coordinates> GetUnVisitedNeighbours()
+    private IDictionary<int, Coordinates> GetUnVisitedNeighbours()
     {
         int neighbourIndex = 0;
         IDictionary<int, Coordinates> neigbourusVisited = new Dictionary<int, Coordinates>();
@@ -104,7 +105,7 @@ public class Maze
         return neigbourusVisited;
     }
 
-    public void SaveIntoGraphRepresentation(Coordinates coordinates)
+    private void SaveIntoGraphRepresentation(Coordinates coordinates)
     {
         if(currentCoordinates.coordinateX != coordinates.coordinateX)
         {
@@ -130,5 +131,14 @@ public class Maze
             }
         }
 
+    }
+
+    private void SetFinishRoom()
+    {
+        if (!treasurePlaced)
+        {
+            treasureCoordinates = currentCoordinates;
+            treasurePlaced = true;
+        }
     }
 }
