@@ -12,15 +12,13 @@ public enum PlacementType
 public class MazeManager : MonoBehaviour
 {
 
-    private Maze maze;
+    public Maze maze { get; set; }
 
     private readonly Dimensions screenSize = new Dimensions(17.7f, 10);
 
     private Dimensions wallSize;
 
-    private float scaleOfWall;
-
-    private GameManager gameManager;
+    public float scaleOfWall { get; set; }
 
     [SerializeField]
     private int gridWidth;
@@ -40,21 +38,19 @@ public class MazeManager : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         maze = new Maze(gridWidth, gridHeight);
         wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
 
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
-        GenerateMaze();
     }
 
-    private void GenerateMaze()
+    public void GenerateMaze()
     {
         DrawGrid();
         GenerateInvincibleRooms();
         AddTunnels();
         AddRandomPaths();
-        gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
+
     }
 
     private void DrawGrid()

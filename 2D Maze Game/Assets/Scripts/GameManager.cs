@@ -12,7 +12,23 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Treasure treasure;
 
-    // Update is called once per frame
+    private MazeManager mazeManager;
+
+    private Graph graph = new Graph();
+
+    private void Start()
+    {
+        mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
+        if (mazeManager != null)
+        {
+            mazeManager.GenerateMaze();
+            Transform playerPosition = mazeManager.FindStartRoom();
+            Transform treasurePosition = mazeManager.FindTreasureRoom();
+            SetUpGame(mazeManager.scaleOfWall, playerPosition, treasurePosition);
+            graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
