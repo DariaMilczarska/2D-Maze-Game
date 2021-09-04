@@ -53,6 +53,7 @@ public class MazeManager : MonoBehaviour
         DrawGrid();
         GenerateInvincibleRooms();
         AddTunnels();
+        //AddRandomPaths();
         gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
     }
 
@@ -157,17 +158,13 @@ public class MazeManager : MonoBehaviour
                 switch (item.Value)
                 {
                     case Directions.RIGHT:
-                        Wall wall = room.rightWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.rightWall); break;
                     case Directions.LEFT:
-                        wall = room.leftWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.leftWall); break;
                     case Directions.DOWN:
-                        wall = room.lowerWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.lowerWall); break;
                     case Directions.UP:
-                        wall = room.upperWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.upperWall); break;
                 }            
             }               
         }
@@ -226,5 +223,26 @@ public class MazeManager : MonoBehaviour
             return room.transform;
         }
         return null;
+    }
+
+    private void RemoveWall(Wall wall)
+    {
+        instantiatedWalls.Remove(wall);
+        Destroy(wall.gameObject); 
+    }
+
+    private void AddRandomPaths()
+    {
+        int addedWalls = 0;
+        System.Random random = new System.Random();
+
+        while(addedWalls < 3)
+        {
+            int wallIndex = random.Next(0, instantiatedWalls.Count);
+            if (instantiatedWalls[wallIndex])
+            {
+
+            }
+        }
     }
 }
