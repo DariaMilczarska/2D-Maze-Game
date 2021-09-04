@@ -50,46 +50,68 @@ public class MazeManager : MonoBehaviour
 
     private void GenerateMaze()
     {
-        DrawGrid();
+        //DrawGrid();
         GenerateInvincibleRooms();
         AddTunnels();
         gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
     }
 
-    private void DrawGrid()
+    private void GenerateInvincibleRooms()
     {
-        foreach(PlacementType type in (PlacementType[])Enum.GetValues(typeof(PlacementType)))
+        float currentPositionX = -screenSize.width / 2 + wallSize.width / 2; ;
+        float currentPositionY = screenSize.height / 2;
+
+        for (int i = 0; i < gridWidth; ++i)
         {
-            float currentPositionX = -(screenSize.width / 2f) + wallSize.width / 2f;
-            float currentPositionY = screenSize.height / 2f;
-
-            int horizontalGridLines = 0, verticalGridLines = 0;
-
-            switch (type)
+            for (int j = 0; j < gridHeight; ++j)
             {
-                case PlacementType.HORIZONTAL:
-                    horizontalGridLines =  gridWidth;
-                    verticalGridLines = gridHeight + 1; break;
-
-                case PlacementType.VERTICAL:
-                    horizontalGridLines = gridWidth + 1;
-                    verticalGridLines = gridHeight; break;
+                Room room = CreateRoom(currentPositionX, currentPositionY, i, j);
+                Room instantiadedRoom = Instantiate(roomPrefab, new Vector2(currentPositionX, currentPositionY - (wallSize.height / 2)), Quaternion.identity);
+                instantiadedRoom.transform.localScale = new Vector2(wallSize.width, wallSize.height);
+                instantiadedRoom.Setup(room);
+                instantiadedRoom.transform.parent = transform;
+                currentPositionY -= wallSize.height;
+                invincibleRooms.Add(instantiadedRoom.coordinates, instantiadedRoom);
             }
-
-            for (int i = 0; i < horizontalGridLines; ++i)
-            {
-                for (int j = 0; j < verticalGridLines; ++j)
-                {
-                    Wall wall = InstantiateWall(currentPositionX, currentPositionY, type);
-                    wall.Setup(type, new Coordinates(i, j));
-                    currentPositionY -= wallSize.height;
-                    instantiatedWalls.Add(wall);
-                }
-                currentPositionX += wallSize.width;
-                currentPositionY = screenSize.height / 2;
-            }
+            currentPositionX += wallSize.width;
+            currentPositionY = screenSize.height / 2;
         }
     }
+
+    /*   private void DrawGrid()
+       {
+           foreach(PlacementType type in (PlacementType[])Enum.GetValues(typeof(PlacementType)))
+           {
+               float currentPositionX = -(screenSize.width / 2f) + wallSize.width / 2f;
+               float currentPositionY = screenSize.height / 2f;
+
+               int horizontalGridLines = 0, verticalGridLines = 0;
+
+               switch (type)
+               {
+                   case PlacementType.HORIZONTAL:
+                       horizontalGridLines =  gridWidth;
+                       verticalGridLines = gridHeight + 1; break;
+
+                   case PlacementType.VERTICAL:
+                       horizontalGridLines = gridWidth + 1;
+                       verticalGridLines = gridHeight; break;
+               }
+
+               for (int i = 0; i < horizontalGridLines; ++i)
+               {
+                   for (int j = 0; j < verticalGridLines; ++j)
+                   {
+                       Wall wall = InstantiateWall(currentPositionX, currentPositionY, type);
+                       wall.Setup(type, new Coordinates(i, j));
+                       currentPositionY -= wallSize.height;
+                       instantiatedWalls.Add(wall);
+                   }
+                   currentPositionX += wallSize.width;
+                   currentPositionY = screenSize.height / 2;
+               }
+           }
+       }*/
 
     private Wall InstantiateWall(float currentPosX, float currentPosY, PlacementType type)
     {
@@ -114,39 +136,50 @@ public class MazeManager : MonoBehaviour
 
     }
 
-    private void GenerateInvincibleRooms()
-    {
-        float currentPositionX = -screenSize.width / 2 + wallSize.width / 2; ;
-        float currentPositionY = screenSize.height / 2;
 
-        for (int i = 0; i < gridWidth; ++i)
+    private Room CreateRoom(float currentPositionX, float currentPositionY, int i, int j)
+    {
+        Coordinates coordinates = new Coordinates(i, j);
+        Wall leftWall = GetInstantiatedWall(coordinates, PlacementType.VERTICAL);
+        if (leftWall == null)
         {
-            for(int j = 0; j < gridHeight; ++j)
-            {
-                Room room = CreateRoom(i, j);
-                Room instantiadedRoom = Instantiate(roomPrefab, new Vector2(currentPositionX, currentPositionY - (wallSize.height / 2)), Quaternion.identity);           
-                instantiadedRoom.transform.localScale = new Vector2(wallSize.width, wallSize.height);
-                instantiadedRoom.Setup(room);
-                instantiadedRoom.transform.parent = transform;
-                currentPositionY -= wallSize.height;
-                invincibleRooms.Add(instantiadedRoom.coordinates, instantiadedRoom);
-            }
-            currentPositionX += wallSize.width;
-            currentPositionY = screenSize.height / 2;
+            leftWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.VERTICAL);
         }
-    }
+        
+        Wall upperWall = GetInstantiatedWall(coordinates, PlacementType.HORIZONTAL);
+        if (upperWall == null)
+        {
+            upperWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.HORIZONTAL);
+        }
 
-    private Room CreateRoom(int i, int j)
-    {
-        Dictionary<Directions, Wall> roomWalls = GetWallsForRoom(new Coordinates(i, j));
-        roomWalls.TryGetValue(Directions.LEFT, out Wall leftWall);
-        roomWalls.TryGetValue(Directions.RIGHT, out Wall rightWall);
-        roomWalls.TryGetValue(Directions.UP, out Wall upperWall);
-        roomWalls.TryGetValue(Directions.DOWN, out Wall lowerWall);
+        Wall rightWall = GetInstantiatedWall(new Coordinates(i + 1, j), PlacementType.VERTICAL);
+        if (upperWall == null)
+        {
+            upperWall = InstantiateWall(currentPositionX + wallSize.width, currentPositionY, PlacementType.VERTICAL);
+        }
+
+        Wall lowerWall = GetInstantiatedWall(new Coordinates(i, j + 1), PlacementType.HORIZONTAL);
+        if (upperWall == null)
+        {
+            currentPositionY -= wallSize.height;
+            upperWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.HORIZONTAL);
+        }
 
         return new Room(i, j, leftWall, rightWall, upperWall, lowerWall);
     }
    
+    private Wall GetInstantiatedWall(Coordinates coordinates, PlacementType placementType)
+    {      
+        foreach(Wall w in instantiatedWalls)
+        {
+            if (w.coordinates.Equals(coordinates) && w.type.Equals(placementType))
+            {
+                return w;
+            }
+        }
+        return null;
+    }
+
     private void AddTunnels()
     {
         List<KeyValuePair<Coordinates, Directions>> graphRepresentation = maze.graphRepresentation;
