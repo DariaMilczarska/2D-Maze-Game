@@ -53,7 +53,7 @@ public class MazeManager : MonoBehaviour
         DrawGrid();
         GenerateInvincibleRooms();
         AddTunnels();
-        //AddRandomPaths();
+        AddRandomPaths();
         gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
     }
 
@@ -150,8 +150,8 @@ public class MazeManager : MonoBehaviour
    
     private void AddTunnels()
     {
-        List<KeyValuePair<Coordinates, Directions>> graphRepresentation = maze.graphRepresentation;
-        foreach (KeyValuePair <Coordinates, Directions> item in graphRepresentation)
+        List<KeyValuePair<Coordinates, Directions>> listOfTunnels = maze.listOfTunnels;
+        foreach (KeyValuePair <Coordinates, Directions> item in listOfTunnels)
         {
             if (invincibleRooms.TryGetValue(item.Key, out Room room))
             {
@@ -233,15 +233,31 @@ public class MazeManager : MonoBehaviour
 
     private void AddRandomPaths()
     {
-        int addedWalls = 0;
+        int deletedWalls = 0;
         System.Random random = new System.Random();
 
-        while(addedWalls < 3)
+        while(deletedWalls < 3)
         {
             int wallIndex = random.Next(0, instantiatedWalls.Count);
-            if (instantiatedWalls[wallIndex])
+            Coordinates wallCoordinates = instantiatedWalls[wallIndex].coordinates;
+            if (wallCoordinates.coordinateX > 0 && wallCoordinates.coordinateX < gridWidth - 1)
             {
-
+                if (wallCoordinates.coordinateY > 0 && wallCoordinates.coordinateY < gridHeight - 1)
+                {
+                    Coordinates besideRoom;
+                    if (instantiatedWalls[wallIndex].type == PlacementType.HORIZONTAL)
+                    {
+                        besideRoom = new Coordinates(wallCoordinates.coordinateX, wallCoordinates.coordinateY - 1);
+                    }
+                    else
+                    {
+                        besideRoom = new Coordinates(wallCoordinates.coordinateX - 1, wallCoordinates.coordinateY);
+                    }
+                    maze.SaveIntoGraphRepresentation(besideRoom, wallCoordinates);
+                    Debug.Log(wallCoordinates.coordinateX + " " + wallCoordinates.coordinateY + " " + instantiatedWalls[wallIndex].type.ToString());
+                    deletedWalls++;
+                    RemoveWall(instantiatedWalls[wallIndex]);
+                }
             }
         }
     }

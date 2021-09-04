@@ -19,7 +19,7 @@ public class Maze
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
     private bool treasurePlaced { get; set; } 
 
-    public List<KeyValuePair<Coordinates, Directions>> graphRepresentation { get; set; } 
+    public List<KeyValuePair<Coordinates, Directions>> listOfTunnels { get; set; } 
 
     private Room[,] mazeMatrix;
     
@@ -29,7 +29,7 @@ public class Maze
     {
         maxWidth = x;
         maxHeight = y;
-        graphRepresentation = new List<KeyValuePair<Coordinates, Directions>>();
+        listOfTunnels = new List<KeyValuePair<Coordinates, Directions>>();
         mazeMatrix = new Room[maxWidth, maxHeight];
 
         for (int i = 0; i < maxWidth; ++i)
@@ -54,7 +54,7 @@ public class Maze
             {
                 Coordinates coordinates = ChooseRandomNeighbour(unvisitedNeighbours); 
                 VisitCurrentRoom(coordinates);
-                SaveIntoGraphRepresentation(coordinates);
+                SaveIntoGraphRepresentation(currentCoordinates, coordinates);
                 currentCoordinates = coordinates;
             }
             else
@@ -105,17 +105,17 @@ public class Maze
         return neigbourusVisited;
     }
 
-    private void SaveIntoGraphRepresentation(Coordinates coordinates)
+    public void SaveIntoGraphRepresentation(Coordinates currentCoordinates, Coordinates coordinates)
     {
         if(currentCoordinates.coordinateX != coordinates.coordinateX)
         {
             if(currentCoordinates.coordinateX - coordinates.coordinateX < 0)
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.RIGHT));
+                listOfTunnels.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.RIGHT));
             }
             else
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.LEFT));
+                listOfTunnels.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.LEFT));
             }
             
         }
@@ -123,11 +123,11 @@ public class Maze
         {
             if (currentCoordinates.coordinateY - coordinates.coordinateY < 0)
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.DOWN));
+                listOfTunnels.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.DOWN));
             }
             else
             {
-                graphRepresentation.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.UP));
+                listOfTunnels.Add(new KeyValuePair<Coordinates, Directions>(currentCoordinates, Directions.UP));
             }
         }
 
