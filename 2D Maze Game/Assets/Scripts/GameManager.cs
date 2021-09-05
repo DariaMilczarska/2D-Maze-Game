@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,10 @@ public class GameManager : MonoBehaviour
             Transform treasurePosition = mazeManager.FindTreasureRoom();
             SetUpGame(mazeManager.scaleOfWall, playerPosition, treasurePosition);
             graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
+            foreach (KeyValuePair<Coordinates, List<Coordinates>> element in graph.graphRepresentation)
+            {
+                Debug.Log(element.Key.coordinateX + " " + element.Key.coordinateY + " values " + String.Join(", ", element.Value));
+            }
         }
     }
 

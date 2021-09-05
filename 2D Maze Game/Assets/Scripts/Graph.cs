@@ -8,12 +8,18 @@ public class Graph
     {
         foreach(KeyValuePair<Coordinates, Directions> element in listOfTunnels)
         {
-            if(graphRepresentation.TryGetValue(element.Key, out List<Coordinates> tempList))
+            Coordinates coordinates = GetCoordinatesFromDirection(element.Key, element.Value);
+            if (graphRepresentation.TryGetValue(element.Key, out List<Coordinates> foundCoordinates))
             {
-                Coordinates coordinates = GetCoordinatesFromDirection(element.Key, element.Value);
-                tempList.Add(coordinates);
+                foundCoordinates.Add(coordinates);
                 graphRepresentation.Remove(element.Key);
-                graphRepresentation.Add(element.Key, tempList);
+                graphRepresentation.Add(element.Key, foundCoordinates);
+            }
+            else
+            {
+                List<Coordinates> newCoordinates = new List<Coordinates>();
+                newCoordinates.Add(coordinates);
+                graphRepresentation.Add(element.Key, newCoordinates);
             }
         }
     }  

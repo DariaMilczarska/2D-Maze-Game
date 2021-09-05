@@ -40,7 +40,6 @@ public class MazeManager : MonoBehaviour
     {
         maze = new Maze(gridWidth, gridHeight);
         wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
-
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
     }
 
@@ -250,7 +249,6 @@ public class MazeManager : MonoBehaviour
                         besideRoom = new Coordinates(wallCoordinates.coordinateX - 1, wallCoordinates.coordinateY);
                     }
                     maze.SaveIntoGraphRepresentation(besideRoom, wallCoordinates);
-                    Debug.Log(wallCoordinates.coordinateX + " " + wallCoordinates.coordinateY + " " + instantiatedWalls[wallIndex].type.ToString());
                     deletedWalls++;
                     RemoveWall(instantiatedWalls[wallIndex]);
                 }

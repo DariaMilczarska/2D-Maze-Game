@@ -382,6 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2447aa07830cd43b0f3927ebff4ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mazeManager: {fileID: 0}
 --- !u!50 &717052434
 Rigidbody2D:
   serializedVersion: 4
@@ -513,7 +514,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d26b13eb4845b469a72e0fc090dc2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treasure: {fileID: 600748349}
   gridWidth: 20
   gridHeight: 15
   wallPerfab: {fileID: 3089019209267082918, guid: 626da9e0dab2dc544a516f371625dfc8, type: 3}
@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 717052433}
+  treasure: {fileID: 600748349}
 --- !u!4 &1805886903
 Transform:
   m_ObjectHideFlags: 0
