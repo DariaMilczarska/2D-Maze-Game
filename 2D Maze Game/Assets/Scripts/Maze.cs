@@ -15,7 +15,7 @@ public class Maze
     private System.Random random = new System.Random();
     public int maxWidth { get; set;}
     public int maxHeight { get; set; }
-    public Coordinates treasureCoordinates { get; set; }
+    public Coordinates startCoordinates { get; set; } = new Coordinates(0, 0);
     public Coordinates currentCoordinates { get; set; } = new Coordinates(0, 0);
     private bool treasurePlaced { get; set; } 
 
@@ -60,7 +60,6 @@ public class Maze
             else
             {
                 visitedRooms.Pop();
-                SetFinishRoom();
             }
         }
     }
@@ -131,14 +130,5 @@ public class Maze
             }
         }
 
-    }
-
-    private void SetFinishRoom()
-    {
-        if (!treasurePlaced)
-        {
-            treasureCoordinates = currentCoordinates;
-            treasurePlaced = true;
-        }
     }
 }

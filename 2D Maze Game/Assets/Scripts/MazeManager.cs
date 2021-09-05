@@ -18,6 +18,8 @@ public class MazeManager : MonoBehaviour
 
     private Dimensions wallSize;
 
+    public Coordinates treasureCoordinates { get; set; }
+
     public float scaleOfWall { get; set; }
 
     [SerializeField]
@@ -38,6 +40,7 @@ public class MazeManager : MonoBehaviour
 
     void Start()
     {
+        treasureCoordinates = new Coordinates(gridWidth - 1, gridHeight - 1);
         maze = new Maze(gridWidth, gridHeight);
         wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
@@ -202,8 +205,7 @@ public class MazeManager : MonoBehaviour
 
     public Transform FindTreasureRoom()
     {
-        Coordinates coordinates = new Coordinates(gridWidth - 1, gridHeight - 1);
-        if (invincibleRooms.TryGetValue(coordinates, out Room room))
+        if (invincibleRooms.TryGetValue(treasureCoordinates, out Room room))
         {
             return room.transform;
         }

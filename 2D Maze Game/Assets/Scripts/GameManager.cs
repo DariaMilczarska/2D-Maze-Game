@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     private MazeManager mazeManager;
 
-    private Graph graph = new Graph();
+    private Graph graph;
 
     private void Start()
     {
@@ -26,11 +26,9 @@ public class GameManager : MonoBehaviour
             Transform playerPosition = mazeManager.FindStartRoom();
             Transform treasurePosition = mazeManager.FindTreasureRoom();
             SetUpGame(mazeManager.scaleOfWall, playerPosition, treasurePosition);
+            graph = new Graph(mazeManager.maze.startCoordinates, mazeManager.treasureCoordinates);
             graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
-            foreach (KeyValuePair<Coordinates, List<Coordinates>> element in graph.graphRepresentation)
-            {
-                Debug.Log(element.Key.coordinateX + " " + element.Key.coordinateY + " values " + String.Join(", ", element.Value));
-            }
+            Algorithm algorithm = new Algorithm(graph);
         }
     }
 

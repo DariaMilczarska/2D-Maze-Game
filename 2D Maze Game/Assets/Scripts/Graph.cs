@@ -4,6 +4,20 @@ using System.Collections.Generic;
 public class Graph   
 {
     public Dictionary<Coordinates, List<Coordinates>> graphRepresentation = new Dictionary<Coordinates, List<Coordinates>>();
+
+    public Coordinates startCoordinates { get; set; }
+    public Coordinates endCoordinates { get; set; }
+
+    public Graph(Coordinates startCoordinates, Coordinates endCoordinates)
+    {
+        this.startCoordinates = startCoordinates;
+        this.endCoordinates = endCoordinates;
+    }
+
+    public Graph()
+    {
+    }
+
     public void TransformIntoGraph(List<KeyValuePair<Coordinates, Directions>> listOfTunnels)
     {
         foreach(KeyValuePair<Coordinates, Directions> element in listOfTunnels)
