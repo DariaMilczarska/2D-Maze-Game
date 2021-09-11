@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,12 +13,33 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Treasure treasure;
 
-    // Update is called once per frame
+    private MazeManager mazeManager;
+
+    private Graph graph;
+
+    public List<Coordinates> playerMovementTrack { get; set; }  = new List<Coordinates>();
+
+    private void Start()
+    {
+        mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
+        if (mazeManager != null)
+        {
+            mazeManager.GenerateMaze();
+            Transform playerPosition = mazeManager.FindStartRoom();
+            Transform treasurePosition = mazeManager.FindTreasureRoom();
+            SetUpGame(mazeManager.scaleOfWall, playerPosition, treasurePosition);
+            graph = new Graph(mazeManager.maze.startCoordinates, mazeManager.treasureCoordinates);
+            graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
+            Algorithm algorithm = new Algorithm(graph);
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
             player.ResetPosition();
+            playerMovementTrack = new List<Coordinates>();
         }
     }
 
@@ -48,5 +70,10 @@ public class GameManager : MonoBehaviour
             player.SetUpPosition(transform.position.x, transform.position.y);
             player.transform.position = transform.position;
         }       
+    }
+
+    public void NewRoomEntered(Coordinates coordinates)
+    {
+        playerMovementTrack.Add(coordinates);
     }
 }

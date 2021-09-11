@@ -12,15 +12,15 @@ public enum PlacementType
 public class MazeManager : MonoBehaviour
 {
 
-    private Maze maze;
+    public Maze maze { get; set; }
 
     private readonly Dimensions screenSize = new Dimensions(17.7f, 10);
 
     private Dimensions wallSize;
 
-    private float scaleOfWall;
+    public Coordinates treasureCoordinates { get; set; }
 
-    private GameManager gameManager;
+    public float scaleOfWall { get; set; }
 
     [SerializeField]
     private int gridWidth;
@@ -40,19 +40,18 @@ public class MazeManager : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        maze = new Maze(gridWidth, gridHeight);
+        treasureCoordinates = new Coordinates(gridWidth - 1, gridHeight - 1);    
         wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
-
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
-        GenerateMaze();
     }
 
-    private void GenerateMaze()
+    public void GenerateMaze()
     {
         GenerateInvincibleRooms();
+        AdjustNeigbours();
+        maze = new Maze(gridWidth, gridHeight, invincibleRooms);
         AddTunnels();
-        gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
+        AddRandomPaths();
     }
 
     private void GenerateInvincibleRooms()
@@ -149,25 +148,21 @@ public class MazeManager : MonoBehaviour
 
     private void AddTunnels()
     {
-        List<KeyValuePair<Coordinates, Directions>> graphRepresentation = maze.graphRepresentation;
-        foreach (KeyValuePair <Coordinates, Directions> item in graphRepresentation)
+        List<KeyValuePair<Room, Directions>> listOfTunnels = maze.listOfTunnels;
+        foreach (KeyValuePair <Room, Directions> item in listOfTunnels)
         {
-            if (invincibleRooms.TryGetValue(item.Key, out Room room))
+            if (invincibleRooms.TryGetValue(item.Key.coordinates, out Room room))
             {
                 switch (item.Value)
                 {
                     case Directions.RIGHT:
-                        Wall wall = room.rightWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.rightWall); break;
                     case Directions.LEFT:
-                        wall = room.leftWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.leftWall); break;
                     case Directions.DOWN:
-                        wall = room.lowerWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.lowerWall); break;
                     case Directions.UP:
-                        wall = room.upperWall;
-                        Destroy(wall.gameObject); break;
+                        RemoveWall(room.upperWall); break;
                 }            
             }               
         }
@@ -175,8 +170,7 @@ public class MazeManager : MonoBehaviour
 
     public Transform FindTreasureRoom()
     {
-        Coordinates coordinates = new Coordinates(gridWidth - 1, gridHeight - 1);
-        if (invincibleRooms.TryGetValue(coordinates, out Room room))
+        if (invincibleRooms.TryGetValue(treasureCoordinates, out Room room))
         {
             return room.transform;
         }
@@ -191,5 +185,65 @@ public class MazeManager : MonoBehaviour
             return room.transform;
         }
         return null;
+    }
+
+    private void RemoveWall(Wall wall)
+    {
+        instantiatedWalls.Remove(wall);
+        Destroy(wall.gameObject); 
+    }
+
+    private void AddRandomPaths()
+    {
+        int deletedWalls = 0;
+        System.Random random = new System.Random();
+
+        while(deletedWalls < 4)
+        {
+            int wallIndex = random.Next(0, instantiatedWalls.Count);
+            Coordinates wallCoordinates = instantiatedWalls[wallIndex].coordinates;
+            if (wallCoordinates.coordinateX > 0 && wallCoordinates.coordinateX < gridWidth - 1)
+            {
+                if (wallCoordinates.coordinateY > 0 && wallCoordinates.coordinateY < gridHeight - 1)
+                {
+                    invincibleRooms.TryGetValue(wallCoordinates, out Room room);
+                    if (instantiatedWalls[wallIndex].type == PlacementType.HORIZONTAL)
+                    {
+                        maze.listOfTunnels.Add(new KeyValuePair<Room, Directions>(room, Directions.UP));
+                    }
+                    else
+                    {
+                        maze.listOfTunnels.Add(new KeyValuePair<Room, Directions>(room, Directions.LEFT));
+                    }                 
+                    deletedWalls++;
+                    RemoveWall(instantiatedWalls[wallIndex]);
+                }
+            }
+        }
+    }
+
+    private void AdjustNeigbours()
+    {
+        foreach(KeyValuePair<Coordinates, Room> room in invincibleRooms)
+        {
+            Room leftRoom = null, rightRoom = null, upperRoom = null, lowerRoom = null;
+            if(room.Key.coordinateX > 0)
+            {               
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX - 1, room.Key.coordinateY), out leftRoom);
+            }
+            if (room.Key.coordinateX < gridWidth - 1)
+            {                
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX + 1, room.Key.coordinateY), out rightRoom);
+            }
+            if (room.Key.coordinateY > 0)
+            {              
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX, room.Key.coordinateY - 1), out upperRoom);
+            }
+            if(room.Key.coordinateY < gridHeight - 1)
+            {              
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX, room.Key.coordinateY + 1), out lowerRoom);
+            }       
+            room.Value.AdjustNeighbours(leftRoom, rightRoom, upperRoom, lowerRoom);
+        }      
     }
 }
