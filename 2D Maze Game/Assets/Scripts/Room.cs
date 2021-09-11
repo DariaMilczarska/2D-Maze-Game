@@ -23,10 +23,7 @@ public class Room : MonoBehaviour
 
     public Wall lowerWall { get; set; }
 
-    public Room()
-    {
-
-    }
+    public Room parent { get; set; }
 
     public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
     {

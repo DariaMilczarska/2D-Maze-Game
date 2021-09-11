@@ -18,23 +18,42 @@ public class Graph
     {
     }
 
-    private Coordinates GetCoordinatesFromDirection(Coordinates startCoordinates, Directions direction)
+    public void TransformIntoGraph(List<KeyValuePair<Room, Directions>> listOfTunnels)
+    {
+        foreach(KeyValuePair<Room, Directions> element in listOfTunnels)
+        {
+            Room room = GetRoomFromDirection(element.Key, element.Value);
+            if (graphRepresentation.TryGetValue(element.Key, out List<Room> foundRooms))
+            {
+                foundRooms.Add(room);
+                graphRepresentation.Remove(element.Key);
+                graphRepresentation.Add(element.Key, foundRooms);
+            }
+            else
+            {
+                List<Room> newNeigbourRoom = new List<Room>();
+                newNeigbourRoom.Add(room);
+                graphRepresentation.Add(element.Key, newNeigbourRoom);
+            }
+        }
+    }  
+    private Room GetRoomFromDirection(Room room, Directions direction)
     {
         if (direction.Equals(Directions.LEFT))
         {
-            return new Coordinates(startCoordinates.coordinateX - 1, startCoordinates.coordinateY); 
+            return room.leftRoom; 
         }
         else if (direction.Equals(Directions.UP))
         {
-            return new Coordinates(startCoordinates.coordinateX, startCoordinates.coordinateY - 1);
+            return room.upperRoom;
         }
         else if (direction.Equals(Directions.RIGHT))
         {
-            return new Coordinates(startCoordinates.coordinateX + 1, startCoordinates.coordinateY);
+            return room.rightRoom;
         }
         else
         {
-            return new Coordinates(startCoordinates.coordinateX, startCoordinates.coordinateY + 1);
+            return room.lowerRoom;
         }
     }
 }
