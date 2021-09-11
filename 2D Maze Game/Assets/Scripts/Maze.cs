@@ -17,10 +17,7 @@ public class Maze
     public int maxHeight { get; set; }
     public Coordinates startCoordinates { get; set; } = new Coordinates(0, 0);
     public Room currentRoom { get; set; }
-
     public List<KeyValuePair<Room, Directions>> listOfTunnels { get; set; } = new List<KeyValuePair<Room, Directions>>();
-
-    private Room[,] mazeMatrix;
     
     private Stack<Room> visitedRooms = new Stack<Room>();
 

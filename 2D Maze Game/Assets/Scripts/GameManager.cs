@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     private Graph graph;
 
+    public List<Coordinates> playerMovementTrack { get; set; }  = new List<Coordinates>();
+
     private void Start()
     {
         mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             player.ResetPosition();
+            playerMovementTrack = new List<Coordinates>();
         }
     }
 
@@ -67,5 +70,10 @@ public class GameManager : MonoBehaviour
             player.SetUpPosition(transform.position.x, transform.position.y);
             player.transform.position = transform.position;
         }       
+    }
+
+    public void NewRoomEntered(Coordinates coordinates)
+    {
+        playerMovementTrack.Add(coordinates);
     }
 }

@@ -31,6 +31,12 @@ public class Room : MonoBehaviour
 
     public double f_score { get; set; }
 
+    private GameManager gameManager;
+
+    void Start()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
     public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
     {
         coordinates = new Coordinates(x, y);
@@ -67,5 +73,13 @@ public class Room : MonoBehaviour
         this.g_score = g_score;
         f_score = g_score + h_score;
         return f_score;
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Player")
+        {
+            gameManager.NewRoomEntered(this.coordinates);
+        }
     }
 }

@@ -89,6 +89,5 @@ public class Algorithm : MonoBehaviour
             solution.Insert(0, node);
             node = node.parent;
         }
-
     }
 }
