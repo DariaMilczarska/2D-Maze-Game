@@ -50,7 +50,6 @@ public class MazeManager : MonoBehaviour
 
     private void GenerateMaze()
     {
-        //DrawGrid();
         GenerateInvincibleRooms();
         AddTunnels();
         gameManager.SetUpGame(scaleOfWall, FindStartRoom(), FindTreasureRoom());
@@ -78,44 +77,10 @@ public class MazeManager : MonoBehaviour
         }
     }
 
-    /*   private void DrawGrid()
-       {
-           foreach(PlacementType type in (PlacementType[])Enum.GetValues(typeof(PlacementType)))
-           {
-               float currentPositionX = -(screenSize.width / 2f) + wallSize.width / 2f;
-               float currentPositionY = screenSize.height / 2f;
-
-               int horizontalGridLines = 0, verticalGridLines = 0;
-
-               switch (type)
-               {
-                   case PlacementType.HORIZONTAL:
-                       horizontalGridLines =  gridWidth;
-                       verticalGridLines = gridHeight + 1; break;
-
-                   case PlacementType.VERTICAL:
-                       horizontalGridLines = gridWidth + 1;
-                       verticalGridLines = gridHeight; break;
-               }
-
-               for (int i = 0; i < horizontalGridLines; ++i)
-               {
-                   for (int j = 0; j < verticalGridLines; ++j)
-                   {
-                       Wall wall = InstantiateWall(currentPositionX, currentPositionY, type);
-                       wall.Setup(type, new Coordinates(i, j));
-                       currentPositionY -= wallSize.height;
-                       instantiatedWalls.Add(wall);
-                   }
-                   currentPositionX += wallSize.width;
-                   currentPositionY = screenSize.height / 2;
-               }
-           }
-       }*/
-
     private Wall InstantiateWall(float currentPosX, float currentPosY, PlacementType type)
     {
         Wall wall = Instantiate(wallPerfab, new Vector2(currentPosX, currentPosY), Quaternion.identity);
+        instantiatedWalls.Add(wall);
         wall.transform.parent = transform;
         if (type == PlacementType.VERTICAL)
         {
@@ -133,9 +98,7 @@ public class MazeManager : MonoBehaviour
         wall.transform.localScale = new Vector2(wallSize.height, scaleOfWall); 
         wall.transform.position = new Vector2(wall.transform.position.x - wallSize.width / 2, wall.transform.position.y - wallSize.height / 2);
         wall.transform.Rotate(new Vector3(0, 0, 90));
-
     }
-
 
     private Room CreateRoom(float currentPositionX, float currentPositionY, int i, int j)
     {
@@ -144,27 +107,31 @@ public class MazeManager : MonoBehaviour
         if (leftWall == null)
         {
             leftWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.VERTICAL);
+            leftWall.Setup(coordinates, PlacementType.VERTICAL);
         }
         
         Wall upperWall = GetInstantiatedWall(coordinates, PlacementType.HORIZONTAL);
         if (upperWall == null)
         {
             upperWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.HORIZONTAL);
+            upperWall.Setup(coordinates, PlacementType.HORIZONTAL);
         }
 
         Wall rightWall = GetInstantiatedWall(new Coordinates(i + 1, j), PlacementType.VERTICAL);
-        if (upperWall == null)
+        if (rightWall == null)
         {
-            upperWall = InstantiateWall(currentPositionX + wallSize.width, currentPositionY, PlacementType.VERTICAL);
+            rightWall = InstantiateWall(currentPositionX + wallSize.width, currentPositionY, PlacementType.VERTICAL);
+            rightWall.Setup(new Coordinates(i + 1, j), PlacementType.VERTICAL);
         }
 
         Wall lowerWall = GetInstantiatedWall(new Coordinates(i, j + 1), PlacementType.HORIZONTAL);
-        if (upperWall == null)
+        if (lowerWall == null)
         {
             currentPositionY -= wallSize.height;
-            upperWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.HORIZONTAL);
-        }
+            lowerWall = InstantiateWall(currentPositionX, currentPositionY, PlacementType.HORIZONTAL);
+            lowerWall.Setup(new Coordinates(i, j + 1), PlacementType.HORIZONTAL);
 
+        }
         return new Room(i, j, leftWall, rightWall, upperWall, lowerWall);
     }
    
@@ -204,41 +171,6 @@ public class MazeManager : MonoBehaviour
                 }            
             }               
         }
-    }
-
-    private Dictionary<Directions, Wall> GetWallsForRoom(Coordinates coordinates)
-    {
-        Dictionary<Directions, Wall> placeholder = new Dictionary<Directions, Wall>();
-        Coordinates rightWallCoordinates = new Coordinates(coordinates.coordinateX + 1, coordinates.coordinateY);
-        Coordinates lowerWallCoordinates = new Coordinates(coordinates.coordinateX, coordinates.coordinateY + 1);
-
-        foreach (Wall wall in instantiatedWalls)
-        {
-            if (wall.coordinates.Equals(coordinates))
-            {
-                if(wall.type == PlacementType.HORIZONTAL)
-                {
-                    placeholder.Add(Directions.UP, wall);
-                }
-                else
-                {
-                    placeholder.Add(Directions.LEFT, wall);
-                }             
-            }
-            else if (wall.coordinates.Equals(rightWallCoordinates) && wall.type == PlacementType.VERTICAL)
-            {
-                placeholder.Add(Directions.RIGHT, wall);
-            }
-            else if (wall.coordinates.Equals(lowerWallCoordinates) && wall.type == PlacementType.HORIZONTAL)
-            {
-                placeholder.Add(Directions.DOWN, wall);
-            }
-            if(placeholder.Count == 4)
-            {
-                break;
-            }
-        }
-        return placeholder;
     }
 
     public Transform FindTreasureRoom()

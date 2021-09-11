@@ -32,4 +32,9 @@ public class Coordinates
         hashCode = hashCode * -1521134295 + coordinateY.GetHashCode();
         return hashCode;
     }
+
+    public override string ToString()
+    {
+        return "(" + coordinateX + ", " + coordinateY + ")";
+    }
 }
