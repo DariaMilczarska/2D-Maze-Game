@@ -40,8 +40,7 @@ public class MazeManager : MonoBehaviour
 
     void Start()
     {
-        treasureCoordinates = new Coordinates(gridWidth - 1, gridHeight - 1);
-        maze = new Maze(gridWidth, gridHeight);
+        treasureCoordinates = new Coordinates(gridWidth - 1, gridHeight - 1);    
         wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
     }
@@ -50,9 +49,10 @@ public class MazeManager : MonoBehaviour
     {
         DrawGrid();
         GenerateInvincibleRooms();
+        AdjustNeigbours();
+        maze = new Maze(gridWidth, gridHeight, invincibleRooms);
         AddTunnels();
         AddRandomPaths();
-
     }
 
     private void DrawGrid()
@@ -148,21 +148,21 @@ public class MazeManager : MonoBehaviour
    
     private void AddTunnels()
     {
-        List<KeyValuePair<Coordinates, Directions>> listOfTunnels = maze.listOfTunnels;
-        foreach (KeyValuePair <Coordinates, Directions> item in listOfTunnels)
+        List<KeyValuePair<Room, Directions>> listOfTunnels = maze.listOfTunnels;
+        foreach (KeyValuePair <Room, Directions> item in listOfTunnels)
         {
-            if (invincibleRooms.TryGetValue(item.Key, out Room room))
+            if (invincibleRooms.TryGetValue(item.Key.coordinates, out Room room))
             {
                 switch (item.Value)
                 {
                     case Directions.RIGHT:
-                        RemoveWall(room.rightWall); break;
-                    case Directions.LEFT:
                         RemoveWall(room.leftWall); break;
+                    case Directions.LEFT:
+                        RemoveWall(room.rightWall); break;
                     case Directions.DOWN:
-                        RemoveWall(room.lowerWall); break;
-                    case Directions.UP:
                         RemoveWall(room.upperWall); break;
+                    case Directions.UP:
+                        RemoveWall(room.lowerWall); break;
                 }            
             }               
         }
@@ -233,7 +233,7 @@ public class MazeManager : MonoBehaviour
         int deletedWalls = 0;
         System.Random random = new System.Random();
 
-        while(deletedWalls < 3)
+        while(deletedWalls < 4)
         {
             int wallIndex = random.Next(0, instantiatedWalls.Count);
             Coordinates wallCoordinates = instantiatedWalls[wallIndex].coordinates;
@@ -241,20 +241,44 @@ public class MazeManager : MonoBehaviour
             {
                 if (wallCoordinates.coordinateY > 0 && wallCoordinates.coordinateY < gridHeight - 1)
                 {
-                    Coordinates besideRoom;
+                    invincibleRooms.TryGetValue(wallCoordinates, out Room room);
                     if (instantiatedWalls[wallIndex].type == PlacementType.HORIZONTAL)
                     {
-                        besideRoom = new Coordinates(wallCoordinates.coordinateX, wallCoordinates.coordinateY - 1);
+                        maze.listOfTunnels.Add(new KeyValuePair<Room, Directions>(room, Directions.UP));
                     }
                     else
                     {
-                        besideRoom = new Coordinates(wallCoordinates.coordinateX - 1, wallCoordinates.coordinateY);
-                    }
-                    maze.SaveIntoGraphRepresentation(besideRoom, wallCoordinates);
+                        maze.listOfTunnels.Add(new KeyValuePair<Room, Directions>(room, Directions.LEFT));
+                    }                 
                     deletedWalls++;
                     RemoveWall(instantiatedWalls[wallIndex]);
                 }
             }
         }
+    }
+
+    private void AdjustNeigbours()
+    {
+        foreach(KeyValuePair<Coordinates, Room> room in invincibleRooms)
+        {
+            Room leftRoom = null, rightRoom = null, upperRoom = null, lowerRoom = null;
+            if(room.Key.coordinateX > 0)
+            {               
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX - 1, room.Key.coordinateY), out leftRoom);
+            }
+            if (room.Key.coordinateX < gridWidth - 1)
+            {                
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX + 1, room.Key.coordinateY), out rightRoom);
+            }
+            if (room.Key.coordinateY > 0)
+            {              
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX, room.Key.coordinateY - 1), out upperRoom);
+            }
+            if(room.Key.coordinateY < gridHeight - 1)
+            {              
+                invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX, room.Key.coordinateY + 1), out lowerRoom);
+            }       
+            room.Value.AdjustNeighbours(leftRoom, rightRoom, upperRoom, lowerRoom);
+        }      
     }
 }

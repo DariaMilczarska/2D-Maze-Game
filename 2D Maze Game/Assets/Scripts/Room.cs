@@ -7,6 +7,14 @@ public class Room : MonoBehaviour
     public Coordinates coordinates { get; set; }
     public bool visited { get; set; }
 
+    public Room leftRoom { get; set; }
+
+    public Room rightRoom { get; set; }
+
+    public Room upperRoom { get; set; }
+
+    public Room lowerRoom { get; set; }
+
     public Wall leftWall { get; set; }
 
     public Wall rightWall { get; set; }
@@ -15,11 +23,9 @@ public class Room : MonoBehaviour
 
     public Wall lowerWall { get; set; }
 
-
-    public Room(int x, int y)
+    public Room()
     {
-        coordinates = new Coordinates(x, y);
-       
+
     }
 
     public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
@@ -29,6 +35,14 @@ public class Room : MonoBehaviour
         rightWall = rWall;
         upperWall = uWall;
         lowerWall = loWall;
+    }
+
+    public void AdjustNeighbours(Room lR, Room rR, Room uR, Room loR)
+    {
+        this.leftRoom = lR;
+        this.rightRoom = rR;
+        this.lowerRoom = loR;
+        this.upperRoom = uR;
     }
 
     public void Setup(Room room)
