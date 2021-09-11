@@ -18,10 +18,10 @@ public class Wall : MonoBehaviour
     {
     }
 
-    public void Setup(PlacementType type, Coordinates coordinates)
+    public void Setup(Coordinates coordinates, PlacementType type)
     {
-        this.type = type;
         this.coordinates = coordinates;
+        this.type = type;
     }
 
     public override bool Equals(object obj)

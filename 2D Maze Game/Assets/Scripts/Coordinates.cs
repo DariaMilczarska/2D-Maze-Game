@@ -35,6 +35,6 @@ public class Coordinates
 
     public override string ToString()
     {
-        return coordinateX + " " + coordinateY;
+        return "(" + coordinateX + ", " + coordinateY + ")";
     }
 }
