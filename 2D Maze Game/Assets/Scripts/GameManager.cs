@@ -26,9 +26,9 @@ public class GameManager : MonoBehaviour
             Transform playerPosition = mazeManager.FindStartRoom();
             Transform treasurePosition = mazeManager.FindTreasureRoom();
             SetUpGame(mazeManager.scaleOfWall, playerPosition, treasurePosition);
-            graph = new Graph(mazeManager.maze.startCoordinates, mazeManager.treasureCoordinates);
-            graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
-            Algorithm algorithm = new Algorithm(graph);
+            //graph = new Graph(mazeManager.maze.startCoordinates, mazeManager.treasureCoordinates);
+            //graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
+            //Algorithm algorithm = new Algorithm(graph);
         }
     }
 
