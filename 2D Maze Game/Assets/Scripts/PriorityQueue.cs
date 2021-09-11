@@ -4,6 +4,7 @@ public class PriorityQueue<T1, T2>
 {
     public List<KeyValuePair<T1, T2>> queue = new List<KeyValuePair<T1, T2>>();
     private int size;
+
     public void Enqueue(T1 key, T2 value)
     {
         size = queue.Count;
@@ -45,5 +46,23 @@ public class PriorityQueue<T1, T2>
     {
         IComparer<T> comparer = Comparer<T>.Default;
         return comparer.Compare(v1, v2) < 0 ? false : true;
+    }
+
+    public bool IsEmpty()
+    {
+        size = queue.Count;
+        return size == 0 ? true : false;
+    }
+
+    public bool Contains(T1 element)
+    {
+        foreach(KeyValuePair<T1, T2> pair in queue)
+        {
+            if (pair.Key.Equals(element))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

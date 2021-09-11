@@ -94,7 +94,7 @@ public class Maze
         {
             if(currentIndex == randomNeigbourIndex)
             {
-                listOfTunnels.Add(pair);
+                listOfTunnels.Add(new KeyValuePair<Room, Directions>(currentRoom, pair.Value));
                 return pair.Key;
             }
             currentIndex++;

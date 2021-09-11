@@ -514,8 +514,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d26b13eb4845b469a72e0fc090dc2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 30
-  gridHeight: 20
+  gridWidth: 20
+  gridHeight: 15
   wallPerfab: {fileID: 3089019209267082918, guid: 626da9e0dab2dc544a516f371625dfc8, type: 3}
   roomPrefab: {fileID: 3106642851818047770, guid: 0c345fe4e3d81b64099392783a1d88f9, type: 3}
 --- !u!4 &1705120297

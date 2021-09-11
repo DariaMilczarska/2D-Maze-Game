@@ -35,6 +35,7 @@ public class Graph
                 newNeigbourRoom.Add(room);
                 graphRepresentation.Add(element.Key, newNeigbourRoom);
             }
+            SaveOppositeTransition(element.Key, room);
         }
     }  
     private Room GetRoomFromDirection(Room room, Directions direction)
@@ -54,6 +55,34 @@ public class Graph
         else
         {
             return room.lowerRoom;
+        }
+    }
+
+    public Room FindRoomByCoordinates(Coordinates coordinates)
+    {
+        foreach(KeyValuePair<Room, List<Room>> node in graphRepresentation)
+        {
+            if (node.Key.coordinates.Equals(coordinates))
+            {
+                return node.Key;
+            }
+        }
+        return null;
+    }
+
+    private void SaveOppositeTransition(Room currentRoom, Room newRoom)
+    {
+        if (graphRepresentation.TryGetValue(newRoom, out List<Room> foundRooms))
+        {
+            foundRooms.Add(currentRoom);
+            graphRepresentation.Remove(newRoom);
+            graphRepresentation.Add(newRoom, foundRooms);
+        }
+        else
+        {
+            List<Room> newNeigbourRoom = new List<Room>();
+            newNeigbourRoom.Add(currentRoom);
+            graphRepresentation.Add(newRoom, newNeigbourRoom);
         }
     }
 }

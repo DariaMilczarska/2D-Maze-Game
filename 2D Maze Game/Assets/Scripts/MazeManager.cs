@@ -156,13 +156,13 @@ public class MazeManager : MonoBehaviour
                 switch (item.Value)
                 {
                     case Directions.RIGHT:
-                        RemoveWall(room.leftWall); break;
-                    case Directions.LEFT:
                         RemoveWall(room.rightWall); break;
+                    case Directions.LEFT:
+                        RemoveWall(room.leftWall); break;
                     case Directions.DOWN:
-                        RemoveWall(room.upperWall); break;
-                    case Directions.UP:
                         RemoveWall(room.lowerWall); break;
+                    case Directions.UP:
+                        RemoveWall(room.upperWall); break;
                 }            
             }               
         }

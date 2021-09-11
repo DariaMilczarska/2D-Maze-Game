@@ -25,6 +25,12 @@ public class Room : MonoBehaviour
 
     public Room parent { get; set; }
 
+    public float g_score { get; set; }
+
+    public double h_score { get; set; }
+
+    public double f_score { get; set; }
+
     public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
     {
         coordinates = new Coordinates(x, y);
@@ -54,5 +60,12 @@ public class Room : MonoBehaviour
     public void VisitRoom()
     {
         visited = true;
+    }
+
+    public double CalculateTotalScore(float g_score)
+    {
+        this.g_score = g_score;
+        f_score = g_score + h_score;
+        return f_score;
     }
 }
