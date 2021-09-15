@@ -41,7 +41,7 @@ public class MazeManager : MonoBehaviour
     void Start()
     {
         treasureCoordinates = new Coordinates(gridWidth - 1, gridHeight - 1);    
-        wallSize = new Dimensions(screenSize.width / (float) gridWidth, screenSize.height / (float) gridHeight);
+        wallSize = new Dimensions(2 / (float) gridWidth, 2 / (float) gridHeight);
         scaleOfWall = (float) (gridWidth + gridHeight) / (float) (gridWidth * gridHeight);
     }
 
