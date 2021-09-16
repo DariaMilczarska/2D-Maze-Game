@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private bool playerPositionSet;
     private float startPositionX;
     private float startPositionY;
+    private float rotation = 0;
 
     [SerializeField]
     private MazeManager mazeManager;
@@ -31,7 +32,13 @@ public class Player : MonoBehaviour
         if (rigidBody != null)
         {
             rigidBody.velocity = (new Vector2(horizontal, vertical) * speed * Time.deltaTime);
+            SetDirection(vertical, horizontal);
         }
+
+        if (vertical != 0)
+        {
+            Debug.Log(vertical);
+        }    
     }
     public void SetUpPosition(float posX, float posY)
     {
@@ -51,15 +58,13 @@ public class Player : MonoBehaviour
             ResetPosition();
         }
     }
-
     private void SetDirection(float vertical, float horizontal)
     {
-        float rotation = 0f;
-        if(vertical > 0)
+        if (vertical > 0)
         {
             rotation = 90;
         }
-        else if(vertical < 0)
+        else if (vertical < 0)
         {
             rotation = 270;
         }
@@ -67,12 +72,11 @@ public class Player : MonoBehaviour
         {
             rotation = 0;
         }
-        else
+        else if(horizontal < 0)
         {
             rotation = 180;
         }
 
-        transform.localRotation = new Quaternion() new Vector3(0, 0, rotation);
+        transform.localRotation = Quaternion.Euler(0, 0, rotation);
     }
-
 }
