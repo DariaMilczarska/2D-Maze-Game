@@ -52,4 +52,27 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetDirection(float vertical, float horizontal)
+    {
+        float rotation = 0f;
+        if(vertical > 0)
+        {
+            rotation = 90;
+        }
+        else if(vertical < 0)
+        {
+            rotation = 270;
+        }
+        if (horizontal > 0)
+        {
+            rotation = 0;
+        }
+        else
+        {
+            rotation = 180;
+        }
+
+        transform.localRotation = new Quaternion() new Vector3(0, 0, rotation);
+    }
+
 }
