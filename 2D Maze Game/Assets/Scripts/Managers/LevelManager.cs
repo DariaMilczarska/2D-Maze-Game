@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    private int level; //for the future
-    
     [SerializeField]
     private Player player;
 
@@ -17,7 +15,9 @@ public class GameManager : MonoBehaviour
 
     private Graph graph;
 
-    public List<Coordinates> playerMovementTrack { get; set; }  = new List<Coordinates>();
+    public List<Coordinates> shortestPath { get; set; } = new List<Coordinates>();
+
+    public List<Coordinates> playerMovementTrack { get; set; } = new List<Coordinates>();
 
     private void Start()
     {
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
             graph = new Graph(mazeManager.maze.startCoordinates, mazeManager.treasureCoordinates);
             graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
             Algorithm algorithm = new Algorithm(graph);
+            shortestPath = algorithm.shortestPath;
         }
     }
 
@@ -58,22 +59,48 @@ public class GameManager : MonoBehaviour
 
     private void SetUpTreasurePosition(Transform transform)
     {
-        if(transform != null)
+        if (transform != null)
         {
             treasure.transform.position = transform.position;
-        }      
+        }
     }
     private void SetUpPlayerPosition(Transform transform)
     {
-        if(transform != null)
+        if (transform != null)
         {
             player.SetUpPosition(transform.position.x, transform.position.y);
             player.transform.position = transform.position;
-        }       
+        }
     }
 
     public void NewRoomEntered(Coordinates coordinates)
     {
         playerMovementTrack.Add(coordinates);
+    }
+
+    public void TreasureHitted()
+    {
+        CalculatePathPoints();
+        //CalculateTimePoints();
+    }
+
+    private float CalculatePathPoints()
+    {
+        int onPathPoints = 0;
+        float score = 0;
+        foreach (Coordinates coordinates in playerMovementTrack)
+        {
+            if (shortestPath.Contains(coordinates))
+            {
+                onPathPoints++;
+            }
+        }
+
+        score = 500 - (playerMovementTrack.Count - shortestPath.Count) + onPathPoints;
+        if (score < 0)
+        {
+            score = 0;
+        }
+        return score;
     }
 }

@@ -31,12 +31,13 @@ public class Room : MonoBehaviour
 
     public double f_score { get; set; }
 
-    private GameManager gameManager;
+    private LevelManager levelManager;
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
     }
+
     public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
     {
         coordinates = new Coordinates(x, y);
@@ -79,7 +80,7 @@ public class Room : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            gameManager.NewRoomEntered(this.coordinates);
+            levelManager.NewRoomEntered(this.coordinates);
         }
     }
 }

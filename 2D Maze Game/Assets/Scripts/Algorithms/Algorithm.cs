@@ -9,6 +9,8 @@ public class Algorithm : MonoBehaviour
     private PriorityQueue<Room, float> openSet = new PriorityQueue<Room, float>();
 
     private List<Room> closedSet = new List<Room>();
+    public List<Coordinates> shortestPath { get; set; } = new List<Coordinates>();
+
     public Algorithm(Graph graph)
     {
         this.graph = graph;
@@ -16,8 +18,7 @@ public class Algorithm : MonoBehaviour
         
         if(startNode != null)
         {
-            openSet.Enqueue(startNode, 0);
-            
+            openSet.Enqueue(startNode, 0);          
         }
 
         StartComputing(graph.startCoordinates, graph.endCoordinates);
@@ -40,8 +41,8 @@ public class Algorithm : MonoBehaviour
             Room parent = openSet.Dequeue();
             if (parent.coordinates.Equals(stopCoordinates))
             {
-                ReadSolution(parent);
-                break; //Computing the solution;
+                shortestPath = ReadSolution(parent);
+                break; 
             }
             closedSet.Add(parent);
             List<Room> neighbours = GetNeighbours(parent);
@@ -81,13 +82,14 @@ public class Algorithm : MonoBehaviour
         neighbour.CalculateTotalScore(temp_g_score);
     }
 
-    private void ReadSolution(Room node)
+    public List<Coordinates> ReadSolution(Room node)
     {
-        List<Room> solution = new List<Room>();
+        List<Coordinates> solution = new List<Coordinates>();
         while (node != null)
         {
-            solution.Insert(0, node);
+            solution.Insert(0, node.coordinates);
             node = node.parent;
         }
+        return solution;
     }
 }
