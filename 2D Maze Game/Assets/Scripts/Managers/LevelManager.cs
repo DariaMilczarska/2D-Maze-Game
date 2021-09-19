@@ -11,6 +11,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private Treasure treasure;
 
+    [SerializeField]
+    private UIManager uiManager;
+
+
     private MazeManager mazeManager;
 
     private Graph graph;
@@ -21,6 +25,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
         if (mazeManager != null)
         {
@@ -80,11 +85,14 @@ public class LevelManager : MonoBehaviour
 
     public void TreasureHitted()
     {
-        CalculatePathPoints();
-        //CalculateTimePoints();
+        uiManager.levelFinished = true;
+        int pathPoints = CalculatePathPoints();
+        float timePoints = CalculateTimePoints();
+        float totalScore = pathPoints + timePoints;
+        uiManager.ShowSummary(totalScore);
     }
 
-    private float CalculatePathPoints()
+    private int CalculatePathPoints()
     {
         int onPathPoints = 0, score = 0, shortestPathCount = shortestPath.Count;
         foreach (Coordinates coordinates in playerMovementTrack)
@@ -101,6 +109,12 @@ public class LevelManager : MonoBehaviour
         {
             score = 0;
         }
+        return score;
+    }
+
+    private float CalculateTimePoints()
+    {
+        float score = 1000 / uiManager.time;
         return score;
     }
 }

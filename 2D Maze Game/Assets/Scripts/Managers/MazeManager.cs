@@ -11,7 +11,6 @@ public enum PlacementType
 
 public class MazeManager : MonoBehaviour
 {
-
     public Maze maze { get; set; }
 
     private readonly Dimensions screenSize = new Dimensions(17.7f, 10);
@@ -199,10 +198,10 @@ public class MazeManager : MonoBehaviour
 
     private void AddRandomPaths()
     {
-        int deletedWalls = 0;
+        int deletedWalls = 0, numberOfWallsToDelete = (gridHeight + gridWidth) / (2*2);
         System.Random random = new System.Random();
 
-        while(deletedWalls < 4)
+        while(deletedWalls < numberOfWallsToDelete)
         {
             int wallIndex = random.Next(0, instantiatedWalls.Count);
             Coordinates wallCoordinates = instantiatedWalls[wallIndex].coordinates;
