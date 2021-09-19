@@ -86,17 +86,17 @@ public class LevelManager : MonoBehaviour
 
     private float CalculatePathPoints()
     {
-        int onPathPoints = 0;
-        float score = 0;
+        int onPathPoints = 0, score = 0, shortestPathCount = shortestPath.Count;
         foreach (Coordinates coordinates in playerMovementTrack)
         {
             if (shortestPath.Contains(coordinates))
             {
+                shortestPath.Remove(coordinates);
                 onPathPoints++;
             }
         }
 
-        score = 500 - (playerMovementTrack.Count - shortestPath.Count) + onPathPoints;
+        score = 500 - (playerMovementTrack.Count - shortestPathCount) + onPathPoints;
         if (score < 0)
         {
             score = 0;
