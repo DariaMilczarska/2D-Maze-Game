@@ -14,6 +14,12 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject levelFinishedPanel;
+
+    [SerializeField]
+    private Text scoreText;
+
+    [SerializeField]
+    private Text bestScoreText;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,5 +40,6 @@ public class UIManager : MonoBehaviour
     public void ShowSummary(float points)
     {
         levelFinishedPanel.SetActive(true);
+        scoreText.text = points.ToString();
     }
 }

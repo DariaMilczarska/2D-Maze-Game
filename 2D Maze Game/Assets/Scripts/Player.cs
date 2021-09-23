@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     {
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
-        float speed = 250f;
+        float speed = 450f;
 
         if (rigidBody != null)
         {
