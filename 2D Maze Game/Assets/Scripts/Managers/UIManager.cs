@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     public int time { get; set; } = 0;
@@ -61,6 +61,6 @@ public class UIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-
+        SceneManager.LoadScene(0);
     }
 }
