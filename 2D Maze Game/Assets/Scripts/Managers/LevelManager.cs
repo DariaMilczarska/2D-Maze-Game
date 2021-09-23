@@ -44,9 +44,14 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            player.ResetPosition();
-            playerMovementTrack = new List<Coordinates>();
+            RestartLevel();
         }
+    }
+
+    public void RestartLevel()
+    {
+        player.ResetPosition();
+        playerMovementTrack = new List<Coordinates>();
     }
 
     public void SetUpGame(float size, Transform playerPosition, Transform treasurePosition)

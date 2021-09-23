@@ -20,6 +20,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Text bestScoreText;
+
+    [SerializeField]
+    private LevelManager levelManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,5 +44,23 @@ public class UIManager : MonoBehaviour
     {
         levelFinishedPanel.SetActive(true);
         scoreText.text = points.ToString();
+        Time.timeScale = 0;
+    }
+
+    public void HideSummary()
+    {
+        levelFinishedPanel.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void RestartLevel()
+    {
+        levelManager.RestartLevel();
+        HideSummary();
+    }
+
+    public void ReturnToMainMenu()
+    {
+
     }
 }
