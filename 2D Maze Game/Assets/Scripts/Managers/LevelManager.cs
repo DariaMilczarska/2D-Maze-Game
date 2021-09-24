@@ -47,6 +47,11 @@ public class LevelManager : MonoBehaviour
         {
             RestartLevel();
         }
+
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            uiManager.PauseGame();
+        }
     }
 
     public void RestartLevel()

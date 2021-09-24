@@ -16,6 +16,9 @@ public class UIManager : MonoBehaviour
     private GameObject levelFinishedPanel;
 
     [SerializeField]
+    private GameObject pausePanel;
+
+    [SerializeField]
     private Text scoreText;
 
     [SerializeField]
@@ -30,6 +33,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         levelFinishedPanel.SetActive(false);
+        pausePanel.SetActive(false);
         StartCoroutine(SetUpTime());
     }
 
@@ -69,5 +73,17 @@ public class UIManager : MonoBehaviour
     {
         HideSummary();
         SceneManager.LoadScene(0);
+    }
+
+    public void PauseGame()
+    {
+        pausePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame()
+    {
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
     }
 }
