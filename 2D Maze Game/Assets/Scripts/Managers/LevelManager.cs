@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        GameObject.FindGameObjectWithTag("Music").GetComponent<AudioManager>().Play();
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
         if (mazeManager != null)

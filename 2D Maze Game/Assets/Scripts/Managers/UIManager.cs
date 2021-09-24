@@ -23,7 +23,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private LevelManager levelManager;
-    // Start is called before the first frame update
+
+    [SerializeField]
+    private GameObject winSound;
+
     void Start()
     {
         levelFinishedPanel.SetActive(false);
@@ -42,6 +45,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowSummary(float points)
     {
+        winSound.GetComponent<AudioSource>().Play();
         levelFinishedPanel.SetActive(true);
         scoreText.text = points.ToString();
         Time.timeScale = 0;
@@ -51,12 +55,14 @@ public class UIManager : MonoBehaviour
     {
         levelFinishedPanel.SetActive(false);
         Time.timeScale = 1;
+        time = 0;
     }
 
     public void RestartLevel()
     {
         levelManager.RestartLevel();
         HideSummary();
+        StartCoroutine(SetUpTime());
     }
 
     public void ReturnToMainMenu()
