@@ -61,6 +61,7 @@ public class UIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        HideSummary();
         SceneManager.LoadScene(0);
     }
 }

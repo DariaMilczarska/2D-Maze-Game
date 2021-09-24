@@ -26,11 +26,11 @@ public class MainMenuManager : MonoBehaviour
         switch (name)
         {
             case "Easy":
-                break;
+                LevelParameters.gridDimensions = new Dimensions(10, 7); break;
             case "Medium":
-                break;
+                LevelParameters.gridDimensions = new Dimensions(20, 15); break;
             case "Hard":
-                break;
+                LevelParameters.gridDimensions = new Dimensions(30, 25); break;
         }
         SceneManager.LoadScene(1);
     }

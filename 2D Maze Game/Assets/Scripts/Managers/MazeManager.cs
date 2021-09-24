@@ -20,16 +20,12 @@ public class MazeManager : MonoBehaviour
 
     private Dimensions wallScale;
 
+    private Dimensions gridDimensions = LevelParameters.gridDimensions;
+
     public Coordinates treasureCoordinates { get; set; }
 
     [SerializeField]
-    public float scaleOfWall { get; set; }
-
-    [SerializeField]
-    private int gridWidth;
-
-    [SerializeField]
-    private int gridHeight;
+    public float scaleOfWall { get; set; }  
 
     [SerializeField]
     private Wall wallPerfab;
@@ -43,17 +39,17 @@ public class MazeManager : MonoBehaviour
 
     void Start()
     {
-        treasureCoordinates = new Coordinates(gridWidth - 1, gridHeight - 1);
-        wallSize = new Dimensions(screenSize.width / (float)gridWidth, screenSize.height / (float)gridHeight);
-        wallScale = new Dimensions((screenSize.width / 4.2f) / (float) gridWidth, (screenSize.height / 4.2f) / (float) gridHeight);
-        scaleOfWall = (float) gridHeight /(float) (gridHeight * gridWidth);
+        treasureCoordinates = new Coordinates((int) gridDimensions.width - 1, (int) gridDimensions.height - 1);
+        wallSize = new Dimensions(screenSize.width / gridDimensions.width, screenSize.height / gridDimensions.height);
+        wallScale = new Dimensions((screenSize.width / 4.2f) / gridDimensions.width, (screenSize.height / 4.2f) / gridDimensions.height);
+        scaleOfWall = gridDimensions.height / (gridDimensions.height * gridDimensions.width);
     }
 
     public void GenerateMaze()
     {
         GenerateInvincibleRooms();
         AdjustNeigbours();
-        maze = new Maze(gridWidth, gridHeight, invincibleRooms);
+        maze = new Maze((int) gridDimensions.width, (int) gridDimensions.height, invincibleRooms);
         AddTunnels();
         AddRandomPaths();
     }
@@ -63,9 +59,9 @@ public class MazeManager : MonoBehaviour
         float currentPositionX = -screenSize.width / 2 + wallSize.width / 2; ;
         float currentPositionY = screenSize.height / 2;
 
-        for (int i = 0; i < gridWidth; ++i)
+        for (int i = 0; i < gridDimensions.width; ++i)
         {
-            for (int j = 0; j < gridHeight; ++j)
+            for (int j = 0; j < gridDimensions.height; ++j)
             {
                 Room room = CreateRoom(currentPositionX, currentPositionY, i, j);
                 Room instantiadedRoom = Instantiate(roomPrefab, new Vector2(currentPositionX, currentPositionY - (wallSize.height / 2)), Quaternion.identity);
@@ -199,16 +195,16 @@ public class MazeManager : MonoBehaviour
 
     private void AddRandomPaths()
     {
-        int deletedWalls = 0, numberOfWallsToDelete = (gridHeight + gridWidth) / (2*2);
+        int deletedWalls = 0, numberOfWallsToDelete = (int) (gridDimensions.height + gridDimensions.width) / (2*2);
         System.Random random = new System.Random();
 
         while(deletedWalls < numberOfWallsToDelete)
         {
             int wallIndex = random.Next(0, instantiatedWalls.Count);
             Coordinates wallCoordinates = instantiatedWalls[wallIndex].coordinates;
-            if (wallCoordinates.coordinateX > 0 && wallCoordinates.coordinateX < gridWidth - 1)
+            if (wallCoordinates.coordinateX > 0 && wallCoordinates.coordinateX < gridDimensions.width - 1)
             {
-                if (wallCoordinates.coordinateY > 0 && wallCoordinates.coordinateY < gridHeight - 1)
+                if (wallCoordinates.coordinateY > 0 && wallCoordinates.coordinateY < gridDimensions.height - 1)
                 {
                     invincibleRooms.TryGetValue(wallCoordinates, out Room room);
                     if (instantiatedWalls[wallIndex].type == PlacementType.HORIZONTAL)
@@ -235,7 +231,7 @@ public class MazeManager : MonoBehaviour
             {               
                 invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX - 1, room.Key.coordinateY), out leftRoom);
             }
-            if (room.Key.coordinateX < gridWidth - 1)
+            if (room.Key.coordinateX < gridDimensions.width - 1)
             {                
                 invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX + 1, room.Key.coordinateY), out rightRoom);
             }
@@ -243,7 +239,7 @@ public class MazeManager : MonoBehaviour
             {              
                 invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX, room.Key.coordinateY - 1), out upperRoom);
             }
-            if(room.Key.coordinateY < gridHeight - 1)
+            if(room.Key.coordinateY < gridDimensions.height - 1)
             {              
                 invincibleRooms.TryGetValue(new Coordinates(room.Key.coordinateX, room.Key.coordinateY + 1), out lowerRoom);
             }       
