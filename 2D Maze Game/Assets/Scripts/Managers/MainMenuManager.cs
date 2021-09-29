@@ -11,14 +11,28 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject levelPanel;
 
+    [SerializeField]
+    private GameObject highScoresPanel;
+
     private void Start()
     {
         QuitRulesPanel();
-        levelPanel.SetActive(false);
+        QuitSelectLevelPanel();
+        QuitHighScoresPanel();
     }
     public void LoadGame()
     {
         levelPanel.SetActive(true);
+    }
+
+    public void Rules()
+    {
+        rulesPanel.SetActive(true);
+    }
+
+    public void QuitRulesPanel()
+    {
+        rulesPanel.SetActive(false);
     }
 
     public void LoadLevel(string name)
@@ -35,16 +49,6 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void Rules()
-    {
-        rulesPanel.SetActive(true);
-    }
-
-    public void QuitRulesPanel()
-    {
-        rulesPanel.SetActive(false);
-    }
-
     public void QuitSelectLevelPanel()
     {
         levelPanel.SetActive(false);
@@ -52,7 +56,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void HighScores()
     {
-        
+        highScoresPanel.SetActive(true);
+    }
+
+    public void QuitHighScoresPanel()
+    {
+        highScoresPanel.SetActive(false);
     }
 
     public void Quit()
