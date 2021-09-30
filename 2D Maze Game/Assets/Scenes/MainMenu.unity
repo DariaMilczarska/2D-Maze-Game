@@ -803,6 +803,7 @@ MonoBehaviour:
   rulesPanel: {fileID: 208890287}
   levelPanel: {fileID: 2014757391}
   highScoresPanel: {fileID: 1325076246}
+  highScores: {fileID: 1491192549}
 --- !u!1 &299590425
 GameObject:
   m_ObjectHideFlags: 0
@@ -3024,7 +3025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 23, y: 183}
+  m_AnchoredPosition: {x: 30, y: 183}
   m_SizeDelta: {x: 240, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1357732015
@@ -3145,7 +3146,8 @@ MonoBehaviour:
     by size of the maze.
 
 
-    To mute/unmute game use the speaker icon int the left
+    Use arrow keys or WSAD to move. In game use ''P''
+    or  ''Esc'' key to pause. To mute/unmute game use the speaker icon int the left
     corner.'
 --- !u!222 &1402725525
 CanvasRenderer:
@@ -3322,6 +3324,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491192548}
+  - component: {fileID: 1491192549}
   m_Layer: 5
   m_Name: ScoreTable
   m_TagString: Untagged
@@ -3362,6 +3365,18 @@ RectTransform:
   m_AnchoredPosition: {x: 14, y: 24}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1491192549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1491192547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c911688b704a04b8a5f880807c0bc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1549598273
 GameObject:
   m_ObjectHideFlags: 0
@@ -4161,7 +4176,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}

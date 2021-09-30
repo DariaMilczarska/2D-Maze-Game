@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+
 public class UIManager : MonoBehaviour
 {
     public int time { get; set; } = 0;
@@ -30,10 +32,15 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject winSound;
 
+    private HighScores highscores;
+
     void Start()
     {
         levelFinishedPanel.SetActive(false);
+        levelFinishedPanel.transform.Find("NewRecordLabel").gameObject.SetActive(false);
+        bestScoreText.text = PlayerPrefs.GetInt("Score0", 0).ToString();
         pausePanel.SetActive(false);
+        highscores = GameObject.Find("ScoreTable").GetComponent<HighScores>();  
         StartCoroutine(SetUpTime());
     }
 
@@ -47,12 +54,13 @@ public class UIManager : MonoBehaviour
         }     
     }
 
-    public void ShowSummary(float points)
+    public void ShowSummary(int points)
     {
         winSound.GetComponent<AudioSource>().Play();
         levelFinishedPanel.SetActive(true);
         scoreText.text = points.ToString();
         Time.timeScale = 0;
+        CheckForBestScore(points);
     }
 
     public void HideSummary()
@@ -85,5 +93,15 @@ public class UIManager : MonoBehaviour
     {
         pausePanel.SetActive(false);
         Time.timeScale = 1;
+    }
+
+    private void CheckForBestScore(int score)
+    {
+        if(score > PlayerPrefs.GetInt("Score0", 0))
+        {
+            levelFinishedPanel.transform.Find("NewRecordLabel").gameObject.SetActive(true);
+        }
+        DateTime currentDate = DateTime.Now;
+        highscores.AddScore(currentDate.ToString(), score);
     }
 }

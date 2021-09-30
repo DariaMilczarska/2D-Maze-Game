@@ -98,9 +98,10 @@ public class LevelManager : MonoBehaviour
     {
         uiManager.levelFinished = true;
         int pathPoints = CalculatePathPoints();
-        float timePoints = CalculateTimePoints();
-        float totalScore = pathPoints + timePoints;
+        int timePoints = CalculateTimePoints();
+        int totalScore = pathPoints + timePoints;
         uiManager.ShowSummary(totalScore);
+        pathPoints = 0; timePoints = 0; totalScore = 0;
     }
 
     private int CalculatePathPoints()
@@ -123,9 +124,9 @@ public class LevelManager : MonoBehaviour
         return score;
     }
 
-    private float CalculateTimePoints()
+    private int CalculateTimePoints()
     {
         float score = 1000 / uiManager.time;
-        return score;
+        return (int) score;
     }
 }

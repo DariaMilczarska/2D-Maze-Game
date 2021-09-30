@@ -597,6 +597,7 @@ MonoBehaviour:
   bestScoreText: {fileID: 1474620523}
   levelManager: {fileID: 1805886902}
   winSound: {fileID: 1146046901}
+  highscores: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,7 +2728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 717052433}
   treasure: {fileID: 600748349}
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 331756828}
 --- !u!4 &1805886903
 Transform:
   m_ObjectHideFlags: 0

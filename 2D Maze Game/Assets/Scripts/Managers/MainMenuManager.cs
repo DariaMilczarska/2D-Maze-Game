@@ -14,6 +14,9 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject highScoresPanel;
 
+    [SerializeField]
+    private HighScores highScores;
+
     private void Start()
     {
         QuitRulesPanel();
@@ -54,8 +57,9 @@ public class MainMenuManager : MonoBehaviour
         levelPanel.SetActive(false);
     }
 
-    public void HighScores()
+    public void ShowHighScores()
     {
+        highScores.LoadScoresTable();
         highScoresPanel.SetActive(true);
     }
 

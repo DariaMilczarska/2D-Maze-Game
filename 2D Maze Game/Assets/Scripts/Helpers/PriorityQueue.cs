@@ -42,6 +42,20 @@ public class PriorityQueue<T1, T2>
         return default(T1);
     }
 
+    public KeyValuePair<T1, T2> Get(int index)
+    {
+        int i = 0;
+        foreach (KeyValuePair<T1, T2> pair in queue)
+        {
+            if(i == index)
+            {
+                return pair;
+            }
+            ++i;
+        }
+        return new KeyValuePair<T1, T2>();
+    }
+
     public static bool Compare<T>(T v1, T v2)
     {
         IComparer<T> comparer = Comparer<T>.Default;
