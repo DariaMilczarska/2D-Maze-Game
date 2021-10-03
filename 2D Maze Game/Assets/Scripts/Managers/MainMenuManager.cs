@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -14,7 +15,10 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject highScoresPanel;
 
-   
+    [SerializeField]
+    private GameObject dropDown;
+
+
     private void Start()
     {
         HighScores.Initialize();
@@ -42,11 +46,14 @@ public class MainMenuManager : MonoBehaviour
         switch (name)
         {
             case "Easy":
-                LevelParameters.gridDimensions = new Dimensions(10, 7); break;
+                LevelParameters.gridDimensions = new Dimensions(10, 7);
+                LevelParameters.name = "E";  break;
             case "Medium":
-                LevelParameters.gridDimensions = new Dimensions(20, 15); break;
+                LevelParameters.gridDimensions = new Dimensions(20, 15);
+                LevelParameters.name = "M"; break;
             case "Hard":
-                LevelParameters.gridDimensions = new Dimensions(30, 25); break;
+                LevelParameters.gridDimensions = new Dimensions(30, 25);
+                LevelParameters.name = "H"; break;
         }
         SceneManager.LoadScene(1);
     }
@@ -58,13 +65,27 @@ public class MainMenuManager : MonoBehaviour
 
     public void ShowHighScores()
     {
-        HighScores.LoadScoresTable();
         highScoresPanel.SetActive(true);
     }
 
     public void QuitHighScoresPanel()
     {
+        HighScores.LoadScoresTable();
         highScoresPanel.SetActive(false);
+    }
+
+    public void SelectHighScoreTable()
+    {
+        switch (dropDown.GetComponent<Dropdown>().value)
+        {
+            case 0:
+                LevelParameters.name = "E"; break;
+            case 1:
+                LevelParameters.name = "M"; break;
+            case 2:
+                LevelParameters.name ="H"; break;
+        }
+        HighScores.LoadScoresTable();
     }
 
     public void Quit()

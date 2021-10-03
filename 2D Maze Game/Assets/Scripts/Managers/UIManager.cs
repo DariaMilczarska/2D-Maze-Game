@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
     {
         levelFinishedPanel.SetActive(false);
         levelFinishedPanel.transform.Find("NewRecordLabel").gameObject.SetActive(false);
-        bestScoreText.text = PlayerPrefs.GetInt("Score0", 0).ToString();
+        bestScoreText.text = PlayerPrefs.GetInt("Score" + LevelParameters.name + "0", 0).ToString();
         pausePanel.SetActive(false);
         StartCoroutine(SetUpTime());
     }
@@ -66,6 +66,7 @@ public class UIManager : MonoBehaviour
         levelFinishedPanel.SetActive(false);
         Time.timeScale = 1;
         time = 0;
+        levelFinished = false;
     }
 
     public void NextLevel()
@@ -73,6 +74,7 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(1);
         Time.timeScale = 1;
         time = 0;
+        levelFinished = false;
     }
 
     public void ReturnToMainMenu()
@@ -95,10 +97,10 @@ public class UIManager : MonoBehaviour
 
     private void CheckForBestScore(int score)
     {
-        if(score > PlayerPrefs.GetInt("Score0", 0))
+        if(score > PlayerPrefs.GetInt("Score" + LevelParameters.name + "0", 0))
         {
-            bestScoreText.text = score.ToString();
             levelFinishedPanel.transform.Find("NewRecordLabel").gameObject.SetActive(true);
+            bestScoreText.text = score.ToString();         
         }
         DateTime currentDate = DateTime.Now;
         HighScores.AddScore(currentDate.ToString(), score);
