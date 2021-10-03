@@ -80,7 +80,7 @@ public class Room : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            levelManager.NewRoomEntered(this.coordinates);
+            levelManager.NewRoomEntered(coordinates);
         }
     }
 }

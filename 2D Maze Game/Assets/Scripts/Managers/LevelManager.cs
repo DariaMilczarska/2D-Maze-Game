@@ -101,12 +101,11 @@ public class LevelManager : MonoBehaviour
         int timePoints = CalculateTimePoints();
         int totalScore = pathPoints + timePoints;
         uiManager.ShowSummary(totalScore);
-        pathPoints = 0; timePoints = 0; totalScore = 0;
     }
 
     private int CalculatePathPoints()
     {
-        int onPathPoints = 0, score = 0, shortestPathCount = shortestPath.Count;
+        int onPathPoints = 0, pathScore = 0, shortestPathCount = shortestPath.Count;
         foreach (Coordinates coordinates in playerMovementTrack)
         {
             if (shortestPath.Contains(coordinates))
@@ -116,17 +115,17 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        score = 500 - (playerMovementTrack.Count - shortestPathCount) + onPathPoints;
-        if (score < 0)
+        pathScore = 500 - (playerMovementTrack.Count - shortestPathCount) + onPathPoints;
+        if (pathScore < 0)
         {
-            score = 0;
+            pathScore = 0;
         }
-        return score;
+        return pathScore;
     }
 
     private int CalculateTimePoints()
     {
-        float score = 1000 / uiManager.time;
-        return (int) score;
+        float timeScore = 1000 / uiManager.time;
+        return (int) timeScore;
     }
 }

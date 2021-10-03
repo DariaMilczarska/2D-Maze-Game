@@ -32,7 +32,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject winSound;
 
-    private HighScores highscores;
 
     void Start()
     {
@@ -40,7 +39,6 @@ public class UIManager : MonoBehaviour
         levelFinishedPanel.transform.Find("NewRecordLabel").gameObject.SetActive(false);
         bestScoreText.text = PlayerPrefs.GetInt("Score0", 0).ToString();
         pausePanel.SetActive(false);
-        highscores = GameObject.Find("ScoreTable").GetComponent<HighScores>();  
         StartCoroutine(SetUpTime());
     }
 
@@ -70,11 +68,11 @@ public class UIManager : MonoBehaviour
         time = 0;
     }
 
-    public void RestartLevel()
+    public void NextLevel()
     {
-        levelManager.RestartLevel();
-        HideSummary();
-        StartCoroutine(SetUpTime());
+        SceneManager.LoadScene(1);
+        Time.timeScale = 1;
+        time = 0;
     }
 
     public void ReturnToMainMenu()
@@ -99,9 +97,10 @@ public class UIManager : MonoBehaviour
     {
         if(score > PlayerPrefs.GetInt("Score0", 0))
         {
+            bestScoreText.text = score.ToString();
             levelFinishedPanel.transform.Find("NewRecordLabel").gameObject.SetActive(true);
         }
         DateTime currentDate = DateTime.Now;
-        highscores.AddScore(currentDate.ToString(), score);
+        HighScores.AddScore(currentDate.ToString(), score);
     }
 }

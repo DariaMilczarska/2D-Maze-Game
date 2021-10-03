@@ -68,6 +68,11 @@ public class PriorityQueue<T1, T2>
         return size == 0 ? true : false;
     }
 
+    public int Size()
+    {
+        return queue.Count;
+    }
+
     public bool Contains(T1 element)
     {
         foreach(KeyValuePair<T1, T2> pair in queue)
