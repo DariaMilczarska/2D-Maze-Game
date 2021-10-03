@@ -37,12 +37,10 @@ public static class HighScores
 
     public static void AddScore(string date, int score)
     {
-        Debug.Log(scores.Size());
         if (!IsScoreHigherThanLowestInTable(score))
         {
             return;
         }
-        Debug.Log(capacity);
 
         scores.Enqueue(date, score);
         scores.Dequeue();

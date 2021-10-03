@@ -69,7 +69,7 @@ public class LevelManager : MonoBehaviour
 
     private void SetUpComponentsSize(float size)
     {
-        player.transform.localScale = new Vector2(2 * size, 2 * size);
+        player.transform.localScale = new Vector2(1.5f * size, 1.5f * size);
         treasure.transform.localScale = new Vector2(2 * size, 2 * size);
     }
 
