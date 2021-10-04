@@ -7,6 +7,8 @@ TagManager:
   - Wall
   - Treasure
   - Music
+  - Speaker
+  - SpeakerMuted
   layers:
   - Default
   - TransparentFX

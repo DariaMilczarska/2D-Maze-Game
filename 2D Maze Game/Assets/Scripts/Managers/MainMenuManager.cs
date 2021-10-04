@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenuManager : MonoBehaviour
+public class MainMenuManager : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private GameObject rulesPanel;
@@ -18,14 +19,25 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject dropDown;
 
+    [SerializeField]
+    private GameObject speaker;
+
+    [SerializeField]
+    private GameObject speakerMuted;
+
+    [SerializeField]
+    private GameObject audioSource;
+
 
     private void Start()
     {
         HighScores.Initialize();
+        speakerMuted.SetActive(false);
         QuitRulesPanel();
         QuitSelectLevelPanel();
         QuitHighScoresPanel();
     }
+
     public void LoadGame()
     {
         levelPanel.SetActive(true);
@@ -91,5 +103,21 @@ public class MainMenuManager : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.pointerCurrentRaycast.gameObject.CompareTag("Speaker"))
+        {
+            speaker.SetActive(false);
+            speakerMuted.SetActive(true);
+            audioSource.GetComponent<AudioManager>().Stop();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.CompareTag("SpeakerMuted"))
+        {
+            speaker.SetActive(true);
+            speakerMuted.SetActive(false);
+            audioSource.GetComponent<AudioManager>().Play();
+        }
     }
 }
