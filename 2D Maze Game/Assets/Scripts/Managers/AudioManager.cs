@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     private static AudioSource audioSource;
 
     private static AudioManager instance = null;
+    public bool isPlaying { get; set; } = true;
     public static AudioManager Instance
     {
         get { return instance; }
@@ -31,6 +32,7 @@ public class AudioManager : MonoBehaviour
         if (!audioSource.isPlaying)
         {
             audioSource.Play();
+            isPlaying = true;
         }
     }
 
@@ -39,6 +41,7 @@ public class AudioManager : MonoBehaviour
         if (audioSource.isPlaying)
         {
             audioSource.Stop();
+            isPlaying = false;
         }
     }
 }

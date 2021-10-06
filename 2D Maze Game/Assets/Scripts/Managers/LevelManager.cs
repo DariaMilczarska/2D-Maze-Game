@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        GameObject.FindGameObjectWithTag("Music").GetComponent<AudioManager>().Play();
+        ShouldPlayMusic();   
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
         if (mazeManager != null)
@@ -51,6 +51,15 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             uiManager.PauseGame();
+        }
+    }
+
+    private void ShouldPlayMusic()
+    {
+        AudioManager audioManager = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioManager>();
+        if (audioManager.isPlaying)
+        {
+            audioManager.Play();
         }
     }
 

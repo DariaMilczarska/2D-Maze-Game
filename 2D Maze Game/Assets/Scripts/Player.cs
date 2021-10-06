@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Movement();
@@ -29,13 +28,13 @@ public class Player : MonoBehaviour
     {
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
-        float speed = 450f;
 
         if (rigidBody != null)
         {
-            rigidBody.velocity = (new Vector2(horizontal, vertical) * speed * Time.deltaTime);
+            rigidBody.velocity = (new Vector2(horizontal, vertical) * LevelParameters.speed * Time.deltaTime);
             SetDirection(vertical, horizontal);
         }  
+        
     }
 
     private void SetDirection(float vertical, float horizontal)
@@ -48,7 +47,7 @@ public class Player : MonoBehaviour
         {
             rotation = 270;
         }
-        if (horizontal > 0)
+        else if (horizontal > 0)
         {
             rotation = 0;
         }

@@ -25,17 +25,29 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private GameObject speakerMuted;
 
-    [SerializeField]
     private GameObject audioSource;
 
 
     private void Start()
     {
+        audioSource = GameObject.Find("BacgroundMusic");
+        SetUpSpeakerIcon();
         HighScores.Initialize();
-        speakerMuted.SetActive(false);
         QuitRulesPanel();
         QuitSelectLevelPanel();
         QuitHighScoresPanel();
+    }
+
+    private void SetUpSpeakerIcon()
+    {
+        if (audioSource.GetComponent<AudioManager>().isPlaying)
+        {
+            speakerMuted.SetActive(false);
+        }
+        else
+        {
+            speaker.SetActive(false);
+        }
     }
 
     public void LoadGame()
@@ -59,13 +71,16 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
         {
             case "Easy":
                 LevelParameters.gridDimensions = new Dimensions(10, 7);
-                LevelParameters.name = "E";  break;
+                LevelParameters.name = "E"; 
+                LevelParameters.speed = 450; break;
             case "Medium":
                 LevelParameters.gridDimensions = new Dimensions(20, 15);
-                LevelParameters.name = "M"; break;
+                LevelParameters.name = "M";
+                LevelParameters.speed = 300; break;
             case "Hard":
                 LevelParameters.gridDimensions = new Dimensions(30, 25);
-                LevelParameters.name = "H"; break;
+                LevelParameters.name = "H";
+                LevelParameters.speed = 150;  break;
         }
         SceneManager.LoadScene(1);
     }
