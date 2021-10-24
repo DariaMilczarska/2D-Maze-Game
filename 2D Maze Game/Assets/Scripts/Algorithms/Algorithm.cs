@@ -55,7 +55,7 @@ public class Algorithm : MonoBehaviour
 
                 float temp_g_score = parent.g_score + 1;
 
-                if (!openSet.Contains(parent))
+                if (!openSet.Contains(neighbour))
                 {
                     neighbour.h_score = GetHeuristicsDistance(neighbour.coordinates);
                     AddNodeToPath(parent, neighbour, temp_g_score);

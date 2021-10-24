@@ -862,7 +862,6 @@ MonoBehaviour:
   dropDown: {fileID: 1826955498}
   speaker: {fileID: 1398804773}
   speakerMuted: {fileID: 456742409}
-  audioSource: {fileID: 2123778455}
 --- !u!1 &299590425
 GameObject:
   m_ObjectHideFlags: 0

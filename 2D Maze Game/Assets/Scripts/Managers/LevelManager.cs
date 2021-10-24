@@ -14,6 +14,12 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;
 
+    [SerializeField]
+    private GameObject playerPath;
+
+    [SerializeField]
+    private GameObject shortetsPath;
+
 
     private MazeManager mazeManager;
 
@@ -22,6 +28,8 @@ public class LevelManager : MonoBehaviour
     public List<Coordinates> shortestPath { get; set; } = new List<Coordinates>();
 
     public List<Coordinates> playerMovementTrack { get; set; } = new List<Coordinates>();
+
+    private float pathSze;
 
     private void Start()
     {
@@ -78,6 +86,7 @@ public class LevelManager : MonoBehaviour
 
     private void SetUpComponentsSize(float size)
     {
+        pathSze = size;
         player.transform.localScale = new Vector2(1.5f * size, 1.5f * size);
         treasure.transform.localScale = new Vector2(2 * size, 2 * size);
     }
@@ -106,10 +115,12 @@ public class LevelManager : MonoBehaviour
     public void TreasureHitted()
     {
         uiManager.levelFinished = true;
+        ShowShortestPath();
+        ShowPlayerPath();
         int pathPoints = CalculatePathPoints();
         int timePoints = CalculateTimePoints();
         int totalScore = pathPoints + timePoints;
-        uiManager.ShowSummary(totalScore);
+        uiManager.ShowSummary(totalScore);       
     }
 
     private int CalculatePathPoints()
@@ -136,5 +147,31 @@ public class LevelManager : MonoBehaviour
     {
         float timeScore = 1000 / uiManager.time;
         return (int) timeScore;
+    }
+
+    private void ShowShortestPath()
+    {
+        foreach (Coordinates coordinates in shortestPath)
+        {
+            if (mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room))
+            {
+                GameObject path = Instantiate(shortetsPath, (room.transform.position - new Vector3(mazeManager.scaleOfWall, 0, 0)), Quaternion.identity);
+                path.transform.parent = uiManager.transform;
+                path.transform.localScale = new Vector2(100 * pathSze, 100 * pathSze);
+            }
+        }        
+    }
+
+    private void ShowPlayerPath()
+    {
+        foreach (Coordinates coordinates in playerMovementTrack)
+        {
+            if (mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room))
+            {
+                GameObject path = Instantiate(playerPath, (room.transform.position + new Vector3(mazeManager.scaleOfWall, 0, 0)), Quaternion.identity);
+                path.transform.parent = uiManager.transform;
+                path.transform.localScale = new Vector2(100 * pathSze, 100 * pathSze);
+            }
+        }
     }
 }

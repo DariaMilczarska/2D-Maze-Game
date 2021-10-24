@@ -72,11 +72,11 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
             case "Easy":
                 LevelParameters.gridDimensions = new Dimensions(10, 7);
                 LevelParameters.name = "E"; 
-                LevelParameters.speed = 450; break;
+                LevelParameters.speed = 400; break;
             case "Medium":
                 LevelParameters.gridDimensions = new Dimensions(20, 15);
                 LevelParameters.name = "M";
-                LevelParameters.speed = 300; break;
+                LevelParameters.speed = 250; break;
             case "Hard":
                 LevelParameters.gridDimensions = new Dimensions(30, 25);
                 LevelParameters.name = "H";

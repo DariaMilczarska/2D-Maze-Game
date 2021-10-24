@@ -18,7 +18,7 @@ public class MazeManager : MonoBehaviour
 
     private Dimensions wallSize;
 
-    private Dimensions wallScale;
+    public Dimensions wallScale { get; set; }
 
     private Dimensions gridDimensions = LevelParameters.gridDimensions;
 
