@@ -8,5 +8,5 @@ public static class LevelParameters
 
     public static String name { get; set; } = "E";
 
-    public static int speed { get; set; } = 450;
+    public static int speed { get; set; } = 550;
 }

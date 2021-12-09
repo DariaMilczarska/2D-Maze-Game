@@ -8,4 +8,5 @@ public class Treasure : MonoBehaviour
     {
         this.transform.position = treasure.position;
     }
+
 }

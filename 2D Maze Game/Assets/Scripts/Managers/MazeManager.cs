@@ -14,7 +14,7 @@ public class MazeManager : MonoBehaviour
 {
     public Maze maze { get; set; }
 
-    private readonly Dimensions screenSize = new Dimensions(17.7f, 10);
+    private readonly Dimensions screenSize = new Dimensions(17.5f, 9.5f);
 
     private Dimensions wallSize;
 
@@ -37,12 +37,22 @@ public class MazeManager : MonoBehaviour
 
     private List<Wall> instantiatedWalls = new List<Wall>();
 
+    private int currentRoomIndex = 0;
+
     void Start()
     {
+        if (LevelParameters.name == "E")
+        {
+            screenSize.height = 9;
+        }
+        if(LevelParameters.name == "H")
+        {
+            screenSize.width = 17.6f;
+        }
         treasureCoordinates = new Coordinates((int) gridDimensions.width - 1, (int) gridDimensions.height - 1);
         wallSize = new Dimensions(screenSize.width / gridDimensions.width, screenSize.height / gridDimensions.height);
         wallScale = new Dimensions((screenSize.width / 4.2f) / gridDimensions.width, (screenSize.height / 4.2f) / gridDimensions.height);
-        scaleOfWall = gridDimensions.height / (gridDimensions.height * gridDimensions.width);
+        scaleOfWall = gridDimensions.height / (gridDimensions.height * gridDimensions.width);       
     }
 
     public void GenerateMaze()
@@ -56,23 +66,23 @@ public class MazeManager : MonoBehaviour
 
     private void GenerateInvincibleRooms()
     {
-        float currentPositionX = -screenSize.width / 2 + wallSize.width / 2; ;
-        float currentPositionY = screenSize.height / 2;
+        float currentPositionX = -screenSize.width / 2 + wallSize.width / 2;
+        float currentPositionY = (float) ((screenSize.height - 0.5) / 2 );
 
         for (int i = 0; i < gridDimensions.width; ++i)
         {
             for (int j = 0; j < gridDimensions.height; ++j)
             {
                 Room room = CreateRoom(currentPositionX, currentPositionY, i, j);
-                Room instantiadedRoom = Instantiate(roomPrefab, new Vector2(currentPositionX, currentPositionY - (wallSize.height / 2)), Quaternion.identity);
-                instantiadedRoom.transform.localScale = new Vector2(wallSize.width, wallSize.height);
+                Room instantiadedRoom = Instantiate(roomPrefab, new Vector3(currentPositionX, currentPositionY - (wallSize.height / 2), 0), Quaternion.identity);
+                instantiadedRoom.transform.localScale = new Vector2(0.8f*wallSize.width, 0.8f*wallSize.height);
                 instantiadedRoom.Setup(room);
                 instantiadedRoom.transform.parent = transform;
                 currentPositionY -= wallSize.height;
                 invincibleRooms.Add(instantiadedRoom.coordinates, instantiadedRoom);
             }
             currentPositionX += wallSize.width;
-            currentPositionY = screenSize.height / 2;
+            currentPositionY = (float)((screenSize.height - 0.5) / 2);
         }
     }
 
@@ -131,7 +141,7 @@ public class MazeManager : MonoBehaviour
             lowerWall.Setup(new Coordinates(i, j + 1), PlacementType.HORIZONTAL);
 
         }
-        return new Room(i, j, leftWall, rightWall, upperWall, lowerWall);
+        return new Room(currentRoomIndex++, i, j, leftWall, rightWall, upperWall, lowerWall);
     }
    
     private Wall GetInstantiatedWall(Coordinates coordinates, PlacementType placementType)
