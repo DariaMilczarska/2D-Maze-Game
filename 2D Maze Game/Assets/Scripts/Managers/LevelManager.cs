@@ -20,19 +20,30 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameObject shortetsPath;
 
+    [SerializeField]
+    private GameObject coin;
+
+    [SerializeField]
+    private GameObject coinSound;
+
+    [SerializeField]
+    private GameObject lineRenderer;
 
     private MazeManager mazeManager;
 
     private Graph graph;
-
     public List<Coordinates> shortestPath { get; set; } = new List<Coordinates>();
-
     public List<Coordinates> playerMovementTrack { get; set; } = new List<Coordinates>();
+
+    private AudioManager audioManager;
 
     private float pathSze;
 
+    private int collectedCoins = 0;
+
     private void Start()
     {
+        audioManager = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioManager>();
         ShouldPlayMusic();   
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         mazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
@@ -44,31 +55,69 @@ public class LevelManager : MonoBehaviour
             SetUpGame(mazeManager.scaleOfWall, playerPosition, treasurePosition);
             graph = new Graph(mazeManager.maze.startCoordinates, mazeManager.treasureCoordinates);
             graph.TransformIntoGraph(mazeManager.maze.listOfTunnels);
-            Algorithm algorithm = new Algorithm(graph);
-            shortestPath = algorithm.shortestPath;
+            DetermineShortestPath();
+            GenerateCoins();
         }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            RestartLevel();
+            if (audioManager.isPlaying)
+            {
+                Mute();
+            }
+            else
+            {
+                UnMute();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        if ((Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) && !uiManager.levelFinished)
         {
-            uiManager.PauseGame();
+            if (uiManager.pausePanel.activeInHierarchy)
+            {
+                uiManager.ResumeGame();
+            }
+            else
+            {
+                uiManager.PauseGame();
+            }          
+        }
+    }
+
+    private void DetermineShortestPath()
+    {
+        Algorithm algorithm = new Algorithm(graph);
+        Dijkstra dijkstra = new Dijkstra(graph);
+        if (dijkstra.shortestPath.Count < algorithm.shortestPath.Count)
+        {
+            shortestPath = dijkstra.shortestPath;
+        }
+        else
+        {
+            shortestPath = algorithm.shortestPath;
         }
     }
 
     private void ShouldPlayMusic()
     {
-        AudioManager audioManager = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioManager>();
+        
         if (audioManager.isPlaying)
         {
             audioManager.Play();
         }
+    }
+
+    private void Mute()
+    {
+        audioManager.Stop();
+    }
+
+    private void UnMute()
+    {
+        audioManager.Play();
     }
 
     public void RestartLevel()
@@ -87,8 +136,8 @@ public class LevelManager : MonoBehaviour
     private void SetUpComponentsSize(float size)
     {
         pathSze = size;
-        player.transform.localScale = new Vector2(1.5f * size, 1.5f * size);
-        treasure.transform.localScale = new Vector2(2 * size, 2 * size);
+        player.transform.localScale = new Vector2(7 * size, 7 * size);
+        treasure.transform.localScale = new Vector2(3 * size, 3 * size);
     }
 
     private void SetUpTreasurePosition(Transform transform)
@@ -120,22 +169,20 @@ public class LevelManager : MonoBehaviour
         int pathPoints = CalculatePathPoints();
         int timePoints = CalculateTimePoints();
         int totalScore = pathPoints + timePoints;
-        uiManager.ShowSummary(totalScore);       
+        int playerPathLenght = playerMovementTrack.Count;
+        if (!playerMovementTrack.Contains(new Coordinates(0,0)))
+        {
+            playerPathLenght++;
+        }
+        uiManager.ShowSummary(totalScore, collectedCoins, shortestPath.Count, playerPathLenght);
+        collectedCoins = 0;
     }
 
     private int CalculatePathPoints()
     {
-        int onPathPoints = 0, pathScore = 0, shortestPathCount = shortestPath.Count;
-        foreach (Coordinates coordinates in playerMovementTrack)
-        {
-            if (shortestPath.Contains(coordinates))
-            {
-                shortestPath.Remove(coordinates);
-                onPathPoints++;
-            }
-        }
+        int pathScore, shortestPathCount = shortestPath.Count;
 
-        pathScore = 500 - (playerMovementTrack.Count - shortestPathCount) + onPathPoints;
+        pathScore = 500 - (playerMovementTrack.Count - shortestPathCount);
         if (pathScore < 0)
         {
             pathScore = 0;
@@ -151,27 +198,73 @@ public class LevelManager : MonoBehaviour
 
     private void ShowShortestPath()
     {
-        foreach (Coordinates coordinates in shortestPath)
-        {
-            if (mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room))
+        List<Transform> points = new List<Transform>();
+        Coordinates coordinates = shortestPath[0];
+        mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room);       
+        points.Add(room.transform);
+        for (int i = 0; i < shortestPath.Count - 1; ++i)
+        {          
+            Coordinates nextRoomCoordinates = shortestPath[i + 1];
+            if (mazeManager.invincibleRooms.TryGetValue(nextRoomCoordinates, out Room nextRoom))
             {
-                GameObject path = Instantiate(shortetsPath, (room.transform.position - new Vector3(mazeManager.scaleOfWall, 0, 0)), Quaternion.identity);
-                path.transform.parent = uiManager.transform;
-                path.transform.localScale = new Vector2(100 * pathSze, 100 * pathSze);
+                points.Add(nextRoom.transform);
             }
-        }        
+        }
+        lineRenderer.GetComponent<LineManager>().CreateShortestPath(points, pathSze);
     }
 
     private void ShowPlayerPath()
     {
-        foreach (Coordinates coordinates in playerMovementTrack)
+        List<Transform> points = new List<Transform>();
+        Coordinates coordinates = new Coordinates(0, 0);
+        mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room);
+        points.Add(room.transform);
+        coordinates = playerMovementTrack[0];
+        mazeManager.invincibleRooms.TryGetValue(coordinates, out room);
+        points.Add(room.transform);
+        for (int i = 0; i < playerMovementTrack.Count - 1; ++i)
         {
-            if (mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room))
+            Debug.Log(playerMovementTrack[i + 1].ToString()); ;
+            Coordinates nextRoomCoordinates = playerMovementTrack[i + 1];
+            if (mazeManager.invincibleRooms.TryGetValue(nextRoomCoordinates, out Room nextRoom))
             {
-                GameObject path = Instantiate(playerPath, (room.transform.position + new Vector3(mazeManager.scaleOfWall, 0, 0)), Quaternion.identity);
-                path.transform.parent = uiManager.transform;
-                path.transform.localScale = new Vector2(100 * pathSze, 100 * pathSze);
+                if (playerMovementTrack[i].coordinateX.Equals(nextRoom.coordinates.coordinateX) || playerMovementTrack[i].coordinateY.Equals(nextRoom.coordinates.coordinateY))
+                {
+                    points.Add(nextRoom.transform);
+                }
+               
             }
+        }
+        lineRenderer.GetComponent<LineManager>().CreatePlayertPath(points, pathSze);
+    }
+
+    public void CollectCoin()
+    {
+        collectedCoins++;
+        if(uiManager.time > 2)
+        {
+            uiManager.time -= 2;
+        }       
+        coinSound.GetComponent<AudioSource>().Play();
+    }
+
+    private void GenerateCoins()
+    {
+        float amountOFCoins = LevelParameters.gridDimensions.width * 2;
+        System.Random random = new System.Random();
+        for(int i = 0; i < amountOFCoins; ++i)
+        {
+            int randomPosX = random.Next(0, (int) LevelParameters.gridDimensions.width);
+            int randomPosY = random.Next(0, (int) LevelParameters.gridDimensions.height);
+            Coordinates coordinates = new Coordinates(randomPosX, randomPosY);
+            if(coordinates.Equals(new Coordinates(0,0)) || coordinates.Equals(new Coordinates((int) LevelParameters.gridDimensions.width - 1, (int) LevelParameters.gridDimensions.height - 1)))
+            {
+                continue;
+            }
+            mazeManager.invincibleRooms.TryGetValue(coordinates, out Room room);
+            GameObject instantiatedCoin = Instantiate(coin, room.transform.position, Quaternion.identity);
+            instantiatedCoin.transform.localScale = new Vector2(3*pathSze, 3*pathSze);
+            instantiatedCoin.transform.parent = this.transform;
         }
     }
 }

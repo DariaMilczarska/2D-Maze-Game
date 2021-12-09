@@ -16,15 +16,22 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject levelFinishedPanel;
-
-    [SerializeField]
-    private GameObject pausePanel;
+    public GameObject pausePanel { get; set; }
 
     [SerializeField]
     private Text scoreText;
 
     [SerializeField]
     private Text bestScoreText;
+
+    [SerializeField]
+    private Text bestPathLength;
+
+    [SerializeField]
+    private Text playerPathLength;
+
+    [SerializeField]
+    private Text coinsText;
 
     [SerializeField]
     private LevelManager levelManager;
@@ -42,6 +49,7 @@ public class UIManager : MonoBehaviour
         showSummaryLabel = GameObject.Find("ShowSummaryLabel");
         showSummaryLabel.gameObject.SetActive(false);
         bestScoreText.text = PlayerPrefs.GetInt("Score" + LevelParameters.name + "0", 0).ToString();
+        pausePanel = GameObject.Find("PausePanel");
         pausePanel.SetActive(false);
         StartCoroutine(SetUpTime());
     }
@@ -75,11 +83,13 @@ public class UIManager : MonoBehaviour
         }     
     }
 
-    public void ShowSummary(int points)
+    public void ShowSummary(int points, int coins, int bestLength, int playerLength)
     {
         winSound.GetComponent<AudioSource>().Play();
         levelFinishedPanel.SetActive(true);
-        scoreText.text = points.ToString();
+        SetUpCollectedCoins(coins);
+        SetUpScore(points);
+        SetUpPathsLength(bestLength, playerLength);
         Time.timeScale = 0;
         CheckForBestScore(points);
     }
@@ -104,7 +114,7 @@ public class UIManager : MonoBehaviour
 
     public void NextLevel()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
         Time.timeScale = 1;
         time = 0;
         levelFinished = false;
@@ -113,7 +123,7 @@ public class UIManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         CloseSummary();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void PauseGame()
@@ -139,5 +149,19 @@ public class UIManager : MonoBehaviour
         HighScores.AddScore(currentDate.ToString(), score);
     }
 
+    public void SetUpScore(int score)
+    {
+        scoreText.text = score.ToString();
+    }
 
+    private void SetUpPathsLength(int best, int player)
+    {
+        bestPathLength.text = "Best path length: " + best.ToString();
+        playerPathLength.text += player.ToString();
+    }
+
+    public void SetUpCollectedCoins(int coins)
+    {
+        coinsText.text = coins.ToString();
+    }
 }
