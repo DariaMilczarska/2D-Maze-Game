@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Graph   
+public class Graph 
 {
     public Dictionary<Room, List<Room>> graphRepresentation = new Dictionary<Room, List<Room>>();
 
@@ -63,6 +64,18 @@ public class Graph
         foreach(KeyValuePair<Room, List<Room>> node in graphRepresentation)
         {
             if (node.Key.coordinates.Equals(coordinates))
+            {
+                return node.Key;
+            }
+        }
+        return null;
+    }
+
+    public Room FindRoomByID(int id)
+    {
+        foreach (KeyValuePair<Room, List<Room>> node in graphRepresentation)
+        {
+            if (node.Key.id.Equals(id))
             {
                 return node.Key;
             }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
+    public int id { get; set; }
     public Coordinates coordinates { get; set; }
     public bool visited { get; set; }
 
@@ -38,8 +39,9 @@ public class Room : MonoBehaviour
         levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
     }
 
-    public Room(int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
+    public Room(int id, int x, int y, Wall lfWall, Wall rWall, Wall uWall, Wall loWall)
     {
+        this.id = id;
         coordinates = new Coordinates(x, y);
         leftWall = lfWall;
         rightWall = rWall;
@@ -57,6 +59,7 @@ public class Room : MonoBehaviour
 
     public void Setup(Room room)
     {
+        id = room.id;
         coordinates = new Coordinates(room.coordinates);
         leftWall = room.leftWall;
         rightWall = room.rightWall;
