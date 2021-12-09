@@ -9,6 +9,7 @@ TagManager:
   - Music
   - Speaker
   - SpeakerMuted
+  - Coin
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Background
   - Foreground
   - UserInterface
-  - 
+  - Paths
   - 
   - 
   - 
@@ -48,6 +49,9 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 305753267
+    locked: 0
+  - name: Paths
+    uniqueID: 576854619
     locked: 0
   - name: UserInterface
     uniqueID: 84690057
