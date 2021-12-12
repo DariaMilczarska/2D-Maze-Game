@@ -84,4 +84,17 @@ public class PriorityQueue<T1, T2>
         }
         return false;
     }
+
+    public void ChangeValueForKey(T1 key, T2 value)
+    {
+        foreach(KeyValuePair<T1, T2> pair in queue)
+        {
+            if (pair.Key.Equals(key))
+            {
+                queue.Remove(pair);
+                Enqueue(key, value);
+                break;
+            }
+        }
+    }
 }

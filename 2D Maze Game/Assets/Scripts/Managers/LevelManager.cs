@@ -224,15 +224,10 @@ public class LevelManager : MonoBehaviour
         points.Add(room.transform);
         for (int i = 0; i < playerMovementTrack.Count - 1; ++i)
         {
-            Debug.Log(playerMovementTrack[i + 1].ToString()); ;
             Coordinates nextRoomCoordinates = playerMovementTrack[i + 1];
             if (mazeManager.invincibleRooms.TryGetValue(nextRoomCoordinates, out Room nextRoom))
             {
-                if (playerMovementTrack[i].coordinateX.Equals(nextRoom.coordinates.coordinateX) || playerMovementTrack[i].coordinateY.Equals(nextRoom.coordinates.coordinateY))
-                {
-                    points.Add(nextRoom.transform);
-                }
-               
+                points.Add(nextRoom.transform);
             }
         }
         lineRenderer.GetComponent<LineManager>().CreatePlayertPath(points, pathSze);

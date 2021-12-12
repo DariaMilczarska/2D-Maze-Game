@@ -44,5 +44,5 @@ public class AudioManager : MonoBehaviour
             isPlaying = false;
         }
     }
-}
+}    
 

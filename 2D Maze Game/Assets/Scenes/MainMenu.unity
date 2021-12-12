@@ -524,7 +524,7 @@ RectTransform:
   m_GameObject: {fileID: 208890287}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.64841676, y: 0.9125, z: 1}
+  m_LocalScale: {x: 0.75, y: 1, z: 1}
   m_Children:
   - {fileID: 1661932658}
   - {fileID: 1402725523}
@@ -2998,7 +2998,7 @@ RectTransform:
   m_GameObject: {fileID: 1064206517}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.8741784, y: 2.2302513, z: 1}
+  m_LocalScale: {x: 8.5727825, y: 5.2550297, z: 1}
   m_Children: []
   m_Father: {fileID: 296064151}
   m_RootOrder: 5
@@ -3046,7 +3046,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -596401769
-  m_SortingLayer: -3
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ae92dbe3b10e7da48ad8a870bfb8349d, type: 3}
   m_Color: {r: 0.68235296, g: 0.68235296, b: 0.68235296, a: 1}
@@ -4258,8 +4258,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -7}
-  m_SizeDelta: {x: 500, y: 200}
+  m_AnchoredPosition: {x: 0, y: 3.0037}
+  m_SizeDelta: {x: 650, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1402725524
 MonoBehaviour:
@@ -4296,13 +4296,22 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Objective of the Shorthest Path game is to solve the maze by choosing
     shortest path possible. Highness of your score depends on chosen path length
-    and time needed to solve the puzzle. Game  contains three difficulty levels.
-    Each one differs by size of the maze.
+    and time needed to solve the puzzle. Road length is calculateb by A* algorithm
+    (in support of Dijkstra algorithm). Path points are calculated by subtraction
+    of basic score and the difference between your line and optimal path length so
+    dont''t worry if youy''ve chosen path slightly different than optimal (sometimes
+    different paths can have the same length). Path length matters the most.  At
+    the end to the score is added proportion of your time spent int the maze. Game 
+    contains three difficulty levels. Each one differs by size of the maze.
 
 
-    Use arrow keys or WSAD to move. In
-    game use ''P'' or  ''Esc'' key to pause. To mute/unmute game use the speaker
-    icon int the left corner.'
+    Use
+    arrow keys or WSAD to move. In game use ''P'' or  ''Esc'' key to pause. To mute/unmute
+    game use the speaker icon int the left corner or press ''M'' button.
+
+
+    Collect
+    coins to subtract one second from timer.'
 --- !u!222 &1402725525
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4950,7 +4959,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -79}
+  m_AnchoredPosition: {x: 0, y: -38}
   m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1661932659
@@ -5620,7 +5629,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 60}
+  m_AnchoredPosition: {x: 0, y: 34}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1891853914
