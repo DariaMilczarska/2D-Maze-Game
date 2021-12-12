@@ -24,14 +24,14 @@ public class Algorithm : MonoBehaviour
         StartComputing(graph.startCoordinates, graph.endCoordinates);
     }
 
-    private double GetHeuristicsDistance(Coordinates coordinates)
+    private double GetDistance(Coordinates coordinates)
     {
         double distance  = 0;
         int x = Math.Abs(coordinates.coordinateX - graph.endCoordinates.coordinateX);
         int y = Math.Abs(coordinates.coordinateY - graph.endCoordinates.coordinateY);
-        distance = Math.Pow(x, 2) + Math.Pow(y, 2);
+        distance = x + y;
 
-        return Math.Sqrt(distance);
+        return distance;
     }
 
     private void StartComputing(Coordinates startCoordinates, Coordinates stopCoordinates)
@@ -57,7 +57,7 @@ public class Algorithm : MonoBehaviour
 
                 if (!openSet.Contains(neighbour))
                 {
-                    neighbour.h_score = GetHeuristicsDistance(neighbour.coordinates);
+                    neighbour.h_score = GetDistance(neighbour.coordinates);
                     AddNodeToPath(parent, neighbour, temp_g_score);
                     openSet.Enqueue(neighbour, (float)neighbour.f_score);
                 }
