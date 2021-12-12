@@ -38,6 +38,21 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
         QuitHighScoresPanel();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (audioSource.GetComponent<AudioManager>().isPlaying)
+            {
+                Mute();
+            }
+            else
+            {
+                UnMute();
+            }
+        }      
+    }
+
     private void SetUpSpeakerIcon()
     {
         if (audioSource.GetComponent<AudioManager>().isPlaying)
@@ -72,17 +87,17 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
             case "Easy":
                 LevelParameters.gridDimensions = new Dimensions(10, 7);
                 LevelParameters.name = "E"; 
-                LevelParameters.speed = 400; break;
+                LevelParameters.speed = 350; break;
             case "Medium":
-                LevelParameters.gridDimensions = new Dimensions(20, 15);
+                LevelParameters.gridDimensions = new Dimensions(18, 14);
                 LevelParameters.name = "M";
-                LevelParameters.speed = 250; break;
+                LevelParameters.speed = 200; break;
             case "Hard":
-                LevelParameters.gridDimensions = new Dimensions(30, 25);
+                LevelParameters.gridDimensions = new Dimensions(25, 20);
                 LevelParameters.name = "H";
-                LevelParameters.speed = 150;  break;
+                LevelParameters.speed = 100;  break;
         }
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     public void QuitSelectLevelPanel()
@@ -92,6 +107,8 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
 
     public void ShowHighScores()
     {
+        LevelParameters.name = "E";
+        HighScores.LoadScoresTable();
         highScoresPanel.SetActive(true);
     }
 
@@ -124,15 +141,25 @@ public class MainMenuManager : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.pointerCurrentRaycast.gameObject.CompareTag("Speaker"))
         {
-            speaker.SetActive(false);
-            speakerMuted.SetActive(true);
-            audioSource.GetComponent<AudioManager>().Stop();
+            Mute();
         }
         else if (eventData.pointerCurrentRaycast.gameObject.CompareTag("SpeakerMuted"))
         {
-            speaker.SetActive(true);
-            speakerMuted.SetActive(false);
-            audioSource.GetComponent<AudioManager>().Play();
+            UnMute();
         }
+    }
+
+    private void Mute()
+    {
+        speaker.SetActive(false);
+        speakerMuted.SetActive(true);
+        audioSource.GetComponent<AudioManager>().Stop();
+    }
+
+    private void UnMute()
+    {
+        speaker.SetActive(true);
+        speakerMuted.SetActive(false);
+        audioSource.GetComponent<AudioManager>().Play();
     }
 }
