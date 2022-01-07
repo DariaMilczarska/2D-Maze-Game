@@ -21,7 +21,7 @@ Projects is finished, but I possibly will add some new fetures in future.
  ![Gameplay](./Pictures/Rozgrywka.png)
  This image shows gameplay on easy level. 
  
-  ## Gameplay
+  ## Game Finished
  ![Finish panel](./Pictures/PanelWygranej.png)
  After finishing level player can see his score, data about collected coins and time needed to complete the level.
  
